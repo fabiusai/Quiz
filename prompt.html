@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Prompt Generator</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Stili personalizzati per migliorare l'aspetto */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .card {
+            background-color: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        /* Stile personalizzato per i cursori (slider) */
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            outline: none;
+            opacity: 0.7;
+            transition: opacity .2s;
+        }
+        input[type="range"]:hover {
+            opacity: 1;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #facc15; /* Giallo */
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #facc15;
+            cursor: pointer;
+            border-radius: 50%;
+        }
+        /* Icona per copiare */
+        .copy-icon {
+            transition: transform 0.2s ease-in-out;
+        }
+        .copy-icon:hover {
+            transform: scale(1.1);
+        }
+    </style>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-gray-900 to-slate-800 text-white min-h-screen p-4 sm:p-8">
+
+    <div class="max-w-4xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-4xl sm:text-5xl font-bold mb-2 text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-500">Quiz Prompt Generator</h1>
+            <p class="text-lg text-slate-400">Crea il prompt perfetto per generare quiz in formato JSON.</p>
+        </header>
+
+        <main class="space-y-8">
+            <!-- Sezione 1: Dettagli del Test -->
+            <section class="card p-6 rounded-2xl">
+                <h2 class="text-2xl font-semibold mb-6 border-b border-white/10 pb-3">1. Dettagli del Test</h2>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                        <label for="topic" class="block text-sm font-medium text-slate-300 mb-2">Argomento Principale</label>
+                        <input type="text" id="topic" placeholder="Es: La Rivoluzione Francese" class="w-full p-3 rounded-md bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                    </div>
+                    <div>
+                        <label for="subject" class="block text-sm font-medium text-slate-300 mb-2">Materia</label>
+                        <input type="text" id="subject" placeholder="Es: Storia" class="w-full p-3 rounded-md bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                    </div>
+                    <div>
+                        <label for="class" class="block text-sm font-medium text-slate-300 mb-2">Classe</label>
+                        <input type="text" id="class" placeholder="Es: Terza Media" class="w-full p-3 rounded-md bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                    </div>
+                </div>
+                <div class="mt-6">
+                    <label for="additional-info" class="block text-sm font-medium text-slate-300 mb-2">Indicazioni Aggiuntive (opzionale)</label>
+                    <textarea id="additional-info" rows="3" placeholder="Es: Usa un tono formale, evita domande troppo specifiche sulle date." class="w-full p-3 rounded-md bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-yellow-400 resize-none"></textarea>
+                </div>
+                <div class="mt-6 pt-6 border-t border-white/10">
+                     <p class="text-sm font-medium text-slate-300 mb-4">Illustrazione del Quiz (opzionale)</p>
+                     <div class="flex items-center gap-4">
+                         <img id="quiz-preview-image" src="" class="w-20 h-20 bg-black/20 rounded-md object-contain hidden">
+                         <div class="flex-grow">
+                             <label class="block text-xs mb-1">Carica da file:</label>
+                             <input type="file" onchange="handleImageUpload(event)" accept="image/png, image/jpeg, image/gif" class="text-sm w-full file:mr-4 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-slate-700 file:text-slate-300 hover:file:bg-slate-600">
+                             <label class="block text-xs mb-1 mt-2">Oppure incolla URL:</label>
+                             <div class="flex">
+                                 <input type="text" id="image-url-input" placeholder="https://..." class="text-sm w-full p-2 rounded-l-md bg-white/10 border border-white/20 focus:outline-none focus:ring-1 focus:ring-yellow-400">
+                                 <button onclick="handleImageUrl(event)" class="bg-yellow-500 hover:bg-yellow-600 text-sm font-bold px-3 rounded-r-md">Carica</button>
+                             </div>
+                         </div>
+                     </div>
+                     <input type="hidden" id="quiz-image-base64">
+                </div>
+            </section>
+
+            <!-- Sezione 2: Struttura del Test -->
+            <section class="card p-6 rounded-2xl">
+                <h2 class="text-2xl font-semibold mb-6 border-b border-white/10 pb-3">2. Struttura del Test</h2>
+                <div>
+                    <label for="total-questions" class="block text-sm font-medium text-slate-300 mb-2">Numero totale di domande</label>
+                    <input type="number" id="total-questions" value="10" min="1" class="w-full p-3 rounded-md bg-white/10 border border-white/20 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                </div>
+                <div class="mt-6">
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="checkbox" id="custom-distribution" class="w-5 h-5 rounded bg-white/20 border-white/30 text-yellow-500 focus:ring-yellow-400">
+                        <span class="text-slate-200">Specifica distribuzione personalizzata</span>
+                    </label>
+                </div>
+                <div id="distribution-sliders" class="mt-6 space-y-4 hidden">
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="true-false-slider" class="text-sm font-medium text-slate-300">Domande Vero / Falso</label>
+                            <span id="true-false-percentage" class="px-2 py-1 text-xs font-bold rounded-full bg-blue-500 text-white">50%</span>
+                        </div>
+                        <input type="range" id="true-false-slider" min="0" max="100" value="50">
+                    </div>
+                    <div>
+                        <div class="flex justify-between items-center mb-2">
+                            <label for="multiple-choice-slider" class="text-sm font-medium text-slate-300">Domande a Risposta Multipla</label>
+                            <span id="multiple-choice-percentage" class="px-2 py-1 text-xs font-bold rounded-full bg-green-500 text-white">50%</span>
+                        </div>
+                        <input type="range" id="multiple-choice-slider" min="0" max="100" value="50">
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sezione 3: Fonti dei Dati -->
+            <section class="card p-6 rounded-2xl">
+                <h2 class="text-2xl font-semibold mb-6 border-b border-white/10 pb-3">3. Fonti dei Dati</h2>
+                <div class="space-y-4">
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="checkbox" id="use-web-search" checked class="w-5 h-5 rounded bg-white/20 border-white/30 text-yellow-500 focus:ring-yellow-400">
+                        <span class="text-slate-200">Ricerca Web (fonti attendibili)</span>
+                    </label>
+                     <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="checkbox" id="use-external-files" class="w-5 h-5 rounded bg-white/20 border-white/30 text-yellow-500 focus:ring-yellow-400">
+                        <span class="text-slate-200">Considera File Esterni (da fornire in un secondo momento)</span>
+                    </label>
+                    <label class="flex items-center space-x-3 cursor-pointer">
+                        <input type="checkbox" id="use-defined-sites" class="w-5 h-5 rounded bg-white/20 border-white/30 text-yellow-500 focus:ring-yellow-400">
+                        <span class="text-slate-200">Usa siti web specifici</span>
+                    </label>
+                </div>
+                <div id="defined-sites-container" class="mt-6 space-y-3 hidden">
+                    <div id="sites-list">
+                        <!-- I campi URL verranno aggiunti qui -->
+                    </div>
+                    <button id="add-site-button" class="text-sm font-semibold text-yellow-400 hover:text-yellow-300">+ Aggiungi URL</button>
+                </div>
+            </section>
+            
+            <!-- Bottone di Generazione -->
+            <div class="text-center pt-4">
+                 <button id="generate-prompt-btn" class="bg-gradient-to-r from-yellow-500 to-orange-600 hover:from-yellow-600 hover:to-orange-700 text-white font-bold py-4 px-10 rounded-lg text-xl shadow-lg transform hover:scale-105 transition-transform">
+                    🚀 Genera Prompt
+                </button>
+            </div>
+            
+            <!-- Sezione Prompt Generato -->
+            <section id="generated-prompt-section" class="card p-6 rounded-2xl hidden">
+                 <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-2xl font-semibold">Prompt Generato</h2>
+                    <button id="copy-prompt-btn" class="flex items-center space-x-2 bg-white/10 hover:bg-white/20 px-4 py-2 rounded-lg transition-colors copy-icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        <span id="copy-btn-text">Copia</span>
+                    </button>
+                </div>
+                <pre id="prompt-output" class="w-full p-4 rounded-md bg-black/30 text-slate-200 whitespace-pre-wrap text-sm leading-relaxed overflow-x-auto"></pre>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Elementi UI
+            const customDistributionCheckbox = document.getElementById('custom-distribution');
+            const distributionSliders = document.getElementById('distribution-sliders');
+            const tfSlider = document.getElementById('true-false-slider');
+            const mcSlider = document.getElementById('multiple-choice-slider');
+            const tfPercentage = document.getElementById('true-false-percentage');
+            const mcPercentage = document.getElementById('multiple-choice-percentage');
+            const useDefinedSitesCheckbox = document.getElementById('use-defined-sites');
+            const definedSitesContainer = document.getElementById('defined-sites-container');
+            const addSiteButton = document.getElementById('add-site-button');
+            const sitesList = document.getElementById('sites-list');
+            const generateBtn = document.getElementById('generate-prompt-btn');
+            const promptSection = document.getElementById('generated-prompt-section');
+            const promptOutput = document.getElementById('prompt-output');
+            const copyBtn = document.getElementById('copy-prompt-btn');
+            
+            // Elementi per l'immagine
+            const previewImage = document.getElementById('quiz-preview-image');
+            const imageUrlInput = document.getElementById('image-url-input');
+            const imageBase64Input = document.getElementById('quiz-image-base64');
+
+            // --- Logica Distribuzione Domande ---
+            customDistributionCheckbox.addEventListener('change', () => {
+                distributionSliders.classList.toggle('hidden', !customDistributionCheckbox.checked);
+            });
+
+            function syncSliders(changedSlider, targetSlider, changedPercentageEl, targetPercentageEl) {
+                const newValue = parseInt(changedSlider.value, 10);
+                const targetValue = 100 - newValue;
+                targetSlider.value = targetValue;
+                changedPercentageEl.textContent = `${newValue}%`;
+                targetPercentageEl.textContent = `${targetValue}%`;
+            }
+
+            tfSlider.addEventListener('input', () => syncSliders(tfSlider, mcSlider, tfPercentage, mcPercentage));
+            mcSlider.addEventListener('input', () => syncSliders(mcSlider, tfSlider, mcPercentage, tfPercentage));
+
+            // --- Logica Siti Web Definiti ---
+            useDefinedSitesCheckbox.addEventListener('change', () => {
+                definedSitesContainer.classList.toggle('hidden', !useDefinedSitesCheckbox.checked);
+                if (useDefinedSitesCheckbox.checked && sitesList.children.length === 0) {
+                    addSiteInput();
+                }
+            });
+
+            addSiteButton.addEventListener('click', addSiteInput);
+
+            function addSiteInput() {
+                if (sitesList.children.length >= 5) {
+                    addSiteButton.disabled = true;
+                    addSiteButton.textContent = "Massimo 5 URL";
+                    return;
+                }
+                const inputContainer = document.createElement('div');
+                inputContainer.className = 'flex items-center space-x-2';
+                inputContainer.innerHTML = `
+                    <input type="url" placeholder="https://esempio.com" class="flex-grow p-2 rounded-md bg-white/10 border border-white/20 focus:outline-none focus:ring-1 focus:ring-yellow-400 text-sm">
+                    <button class="remove-site-btn p-2 rounded-full bg-red-500/20 hover:bg-red-500/40 text-red-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                    </button>
+                `;
+                sitesList.appendChild(inputContainer);
+                inputContainer.querySelector('.remove-site-btn').addEventListener('click', () => {
+                    sitesList.removeChild(inputContainer);
+                    addSiteButton.disabled = false;
+                    addSiteButton.textContent = "+ Aggiungi URL";
+                });
+            }
+            
+            // --- Logica Gestione Immagini ---
+            window.handleImageUpload = function(event) {
+                const file = event.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const base64 = e.target.result;
+                    imageBase64Input.value = base64;
+                    previewImage.src = base64;
+                    previewImage.classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+
+            window.handleImageUrl = async function(event) {
+                event.preventDefault();
+                const url = imageUrlInput.value.trim();
+                if (!url) return;
+                const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+                try {
+                    const response = await fetch(proxyUrl);
+                    if (!response.ok) throw new Error('Network response was not ok.');
+                    const blob = await response.blob();
+                    const reader = new FileReader();
+                    reader.onloadend = () => {
+                        const base64 = reader.result;
+                        imageBase64Input.value = base64;
+                        previewImage.src = base64;
+                        previewImage.classList.remove('hidden');
+                        imageUrlInput.value = '';
+                    };
+                    reader.readAsDataURL(blob);
+                } catch (error) {
+                    console.error("Error fetching image from URL:", error);
+                    alert("Impossibile caricare l'immagine dall'URL. Prova a scaricarla e caricarla come file.");
+                }
+            }
+            
+            // --- Logica Generazione Prompt ---
+            generateBtn.addEventListener('click', () => {
+                const prompt = buildPrompt();
+                promptOutput.textContent = prompt;
+                promptSection.classList.remove('hidden');
+                promptSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+
+            function buildPrompt() {
+                // Raccogli tutti i dati dagli input
+                const topic = document.getElementById('topic').value.trim() || 'un argomento generale';
+                const subject = document.getElementById('subject').value.trim();
+                const studentClass = document.getElementById('class').value.trim();
+                const additionalInfo = document.getElementById('additional-info').value.trim();
+                const totalQuestions = document.getElementById('total-questions').value;
+                const useWeb = document.getElementById('use-web-search').checked;
+                const useFiles = document.getElementById('use-external-files').checked;
+                const useSites = document.getElementById('use-defined-sites').checked;
+                const imageBase64 = imageBase64Input.value;
+                
+                const siteUrls = Array.from(sitesList.querySelectorAll('input[type="url"]'))
+                                     .map(input => input.value.trim())
+                                     .filter(url => url);
+
+                let questionDistribution = `Sarà l'AI a decidere la distribuzione ottimale.`;
+                if(customDistributionCheckbox.checked) {
+                    const tfPercent = tfSlider.value;
+                    const mcPercent = mcSlider.value;
+                    const tfCount = Math.round((totalQuestions * tfPercent) / 100);
+                    const mcCount = totalQuestions - tfCount;
+                    questionDistribution = `Genera esattamente ${tfCount} domande di tipo "Vero/Falso" e ${mcCount} domande di tipo "Risposta Multipla".`;
+                }
+
+                let promptText = `Sei un assistente AI specializzato nella creazione di contenuti didattici. Il tuo compito è generare un quiz in formato JSON basato sulle seguenti specifiche. Il JSON deve essere perfettamente formattato per essere importato direttamente in un'applicazione, senza alcun testo o commento aggiuntivo al di fuori del codice JSON.\n\n`;
+
+                promptText += `### Contesto del Quiz\n`;
+                promptText += `* **Argomento:** ${topic}\n`;
+                if(subject) promptText += `* **Materia:** ${subject}\n`;
+                if(studentClass) promptText += `* **Classe:** ${studentClass}\n`;
+                if(additionalInfo) promptText += `* **Indicazioni Aggiuntive:** ${additionalInfo}\n`;
+                promptText += `\n`;
+                
+                promptText += `### Struttura del Quiz\n`;
+                promptText += `* **Numero Totale Domande:** ${totalQuestions}\n`;
+                promptText += `* **Distribuzione Domande:** ${questionDistribution}\n\n`;
+
+                promptText += `### Fonti da Utilizzare\n`;
+                promptText += `* **Utilizza Ricerca Web:** ${useWeb ? 'Sì' : 'No'}\n`;
+                promptText += `* **Considera file esterni (forniti in seguito):** ${useFiles ? 'Sì' : 'No'}\n`;
+                if(useSites && siteUrls.length > 0) {
+                     promptText += `* **Usa specificamente i seguenti siti web:**\n${siteUrls.map(url => `    * ${url}`).join('\n')}\n`;
+                }
+                promptText += `\n`;
+                
+                promptText += `### Formato JSON Richiesto\n`;
+                promptText += `Crea un singolo oggetto JSON con le seguenti chiavi:\n`;
+                promptText += `1.  **title**: (stringa) Il titolo del quiz, basato sull'argomento.\n`;
+                promptText += `2.  **subtitle**: (stringa) Un sottotitolo appropriato per il quiz.\n`;
+                if (imageBase64) {
+                    promptText += `3.  **image**: (stringa) Usa la seguente stringa Base64 per l'immagine: "${imageBase64}"\n`;
+                } else {
+                    promptText += `3.  **image**: (stringa) Lascia questo campo come 'null'.\n`;
+                }
+                promptText += `4.  **questions**: (array di oggetti) Un array contenente tutte le domande.\n\n`;
+                
+                promptText += `Ogni oggetto domanda nell'array "questions" deve avere la seguente struttura:\n`;
+                promptText += `* **type**: (stringa) Deve essere "multiple-choice" o "true-false".\n`;
+                promptText += `* **question**: (stringa) Il testo della domanda.\n`;
+                promptText += `* **answers**: (array di stringhe). Per "multiple-choice", deve contenere 4 opzioni. Per "true-false", deve contenere esattamente ["Vero", "Falso"].\n`;
+                promptText += `* **correctAnswer**: (numero) L'indice (a partire da 0) della risposta corretta nell'array "answers".\n\n`;
+
+                promptText += `### Esempio Domanda Risposta Multipla:\n`;
+                promptText += `{\n  "type": "multiple-choice",\n  "question": "Chi era il re di Francia durante la Rivoluzione Francese?",\n  "answers": ["Napoleone Bonaparte", "Luigi XVI", "Robespierre", "Luigi XIV"],\n  "correctAnswer": 1\n}\n\n`;
+
+                promptText += `### Esempio Domanda Vero/Falso:\n`;
+                promptText += `{\n  "type": "true-false",\n  "question": "La presa della Bastiglia avvenne nel 1789.",\n  "answers": ["Vero", "Falso"],\n  "correctAnswer": 0\n}\n\n`;
+
+                promptText += `Ora, genera il quiz completo in formato JSON seguendo rigorosamente tutte le istruzioni.`;
+                
+                return promptText;
+            }
+
+            // --- Logica Copia Prompt ---
+            copyBtn.addEventListener('click', () => {
+                const textToCopy = promptOutput.textContent;
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    const originalText = document.getElementById('copy-btn-text').textContent;
+                    document.getElementById('copy-btn-text').textContent = 'Copiato!';
+                    setTimeout(() => {
+                        document.getElementById('copy-btn-text').textContent = originalText;
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Errore durante la copia:', err);
+                    alert("Impossibile copiare il testo.");
+                });
+            });
+        });
+    </script>
+</body>
+</html>
+
