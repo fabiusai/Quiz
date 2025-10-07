@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Maker in Stile Kahoot</title>
+    <!-- Tailwind CSS per lo stile -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tone.js per gli effetti sonori -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+    <style>
+        /* Stili personalizzati per migliorare l'aspetto */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .view {
+            display: none;
+        }
+        .view.active {
+            display: flex; /* Usiamo flex per centrare il contenuto */
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        /* Animazione per i pulsanti e le card */
+        .card-hover {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        /* Colori per le risposte */
+        .answer-btn-red { background-color: #ef4444; }
+        .answer-btn-blue { background-color: #3b82f6; }
+        .answer-btn-yellow { background-color: #eab308; }
+        .answer-btn-green { background-color: #22c55e; }
+        
+        #quiz-player-view.active, #quiz-creator-view.active {
+             display: block; /* Manteniamo block per le view complesse */
+        }
+        #audio-unlock-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 999;
+            background-color: rgba(0,0,0,0.7);
+            backdrop-filter: blur(10px);
+        }
+        #mute-controls {
+            position: fixed;
+            bottom: 1rem;
+            right: 1rem;
+            z-index: 1000;
+            display: flex;
+            gap: 0.5rem;
+        }
+    </style>
+     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gradient-to-br from-indigo-500 to-purple-600 min-h-screen flex items-center justify-center p-4 text-white">
+
+    <!-- Overlay per sblocco audio su iOS -->
+    <div id="audio-unlock-overlay" class="view active">
+        <div class="text-center">
+            <h1 class="text-4xl font-bold mb-4">Benvenuto in Quiz Master!</h1>
+            <p class="text-lg mb-8">Clicca per iniziare e abilitare i suoni.</p>
+            <button onclick="initializeAudio()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-lg text-2xl card-hover animate-pulse">
+                Inizia
+            </button>
+        </div>
+    </div>
+
+
+    <div id="app-container" class="w-full max-w-4xl mx-auto relative">
+
+        <!-- Schermata Principale -->
+        <div id="main-menu-view" class="view text-center">
+            <div>
+                <h1 class="text-5xl font-bold mb-4 animate-pulse">Quiz Master</h1>
+                <p class="text-xl mb-8">Crea, carica e gioca i tuoi quiz personalizzati!</p>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <button onclick="switchView('quiz-creator-view'); playClickSound();" class="card-hover bg-white/20 p-8 rounded-lg text-2xl font-bold backdrop-blur-sm">
+                        🚀 Crea un Nuovo Quiz
+                    </button>
+                    <label for="quiz-file-input" class="card-hover bg-white/20 p-8 rounded-lg text-2xl font-bold cursor-pointer backdrop-blur-sm">
+                        📂 Carica un Quiz
+                        <input type="file" id="quiz-file-input" class="hidden" accept=".json, .txt" onchange="loadQuizFromFile(event)">
+                    </label>
+                </div>
+                <div id="play-quiz-section" class="mt-8 hidden">
+                     <h2 id="loaded-quiz-title" class="text-3xl font-bold mb-4"></h2>
+                     <button onclick="startQuiz()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-lg text-2xl card-hover">
+                         ▶️ Gioca!
+                     </button>
+                 </div>
+            </div>
+        </div>
+
+        <!-- Schermata Creazione Quiz -->
+        <div id="quiz-creator-view" class="view bg-white/10 p-8 rounded-lg shadow-2xl backdrop-blur-md">
+            <h2 class="text-3xl font-bold mb-6 text-center">Crea il Tuo Quiz</h2>
+            <div class="mb-4">
+                <label for="quiz-title-input" class="block text-lg font-medium mb-2">Titolo del Quiz:</label>
+                <input type="text" id="quiz-title-input" placeholder="Es: Capitali del Mondo" class="w-full p-3 rounded-md bg-white/20 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+            </div>
+             <div class="mb-4">
+                <label for="quiz-subtitle-input" class="block text-lg font-medium mb-2">Sottotitolo (opzionale):</label>
+                <input type="text" id="quiz-subtitle-input" placeholder="Es: Un test per veri esperti" class="w-full p-3 rounded-md bg-white/20 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+            </div>
+            <div class="mt-4 p-4 border border-dashed border-white/40 rounded-lg">
+                <p class="text-sm mb-2 font-medium">Illustrazione del Quiz (opzionale)</p>
+                <div class="flex items-center gap-4">
+                    <img id="quiz-preview-image" src="" class="w-20 h-20 bg-white/10 rounded-md object-contain hidden">
+                    <div class="flex-grow">
+                        <label class="block text-xs mb-1">Carica da file:</label>
+                        <input type="file" onchange="handleImageUpload(event, 'quiz')" accept="image/png, image/jpeg, image/gif" class="text-sm w-full file:mr-4 file:py-1 file:px-2 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-violet-50 file:text-violet-700 hover:file:bg-violet-100">
+                        <label class="block text-xs mb-1 mt-2">Oppure incolla URL:</label>
+                        <div class="flex">
+                            <input type="text" id="image-url-quiz" placeholder="https://..." class="text-sm w-full p-1 rounded-l-md bg-white/20 border border-white/30 focus:outline-none focus:ring-1 focus:ring-yellow-400 text-gray-300">
+                            <button onclick="handleImageUrl(event, 'quiz')" class="bg-yellow-500 hover:bg-yellow-600 text-sm px-2 rounded-r-md">Carica</button>
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="quiz-image-base64">
+            </div>
+            <hr class="my-6 border-white/20">
+            <div id="questions-container">
+                <!-- Le domande verranno aggiunte qui dinamicamente -->
+            </div>
+            <div class="flex justify-between items-center mt-6">
+                <button onclick="addQuestion(); playClickSound();" class="bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded-md card-hover">+ Aggiungi Domanda</button>
+                <div>
+                    <button onclick="switchView('main-menu-view'); playClickSound();" class="bg-gray-500 hover:bg-gray-600 font-bold py-2 px-4 rounded-md card-hover mr-2">Annulla</button>
+                    <button onclick="saveQuiz(); playClickSound();" class="bg-green-500 hover:bg-green-600 font-bold py-2 px-4 rounded-md card-hover">Salva Quiz</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schermata di Gioco -->
+        <div id="quiz-player-view" class="view text-center">
+            <div class="bg-white/10 p-6 rounded-lg shadow-2xl backdrop-blur-md w-full relative">
+                <div id="quiz-header-player" class="text-center mb-4 border-b border-white/20 pb-4"></div>
+                <div class="flex justify-between items-center mb-4 text-lg">
+                    <span id="question-counter">Domanda 1 / 10</span>
+                    <div class="flex flex-col items-center">
+                        <div id="timer-display" class="text-4xl font-bold bg-white/20 rounded-full w-20 h-20 flex items-center justify-center">20</div>
+                        <button id="timer-toggle-btn" onclick="toggleTimer(); playClickSound();" class="mt-2 bg-green-500 hover:bg-green-600 px-4 py-1 rounded-md text-sm font-semibold transition-colors">Avvia</button>
+                    </div>
+                    <span id="score-display" class="font-bold">Punteggio: 0</span>
+                </div>
+                 <div id="question-image-container" class="mb-4 hidden flex justify-center items-center">
+                    <img id="question-image" src="" class="w-48 h-48 mx-auto rounded-lg bg-white/10 object-contain">
+                </div>
+                <div class="bg-white/20 p-8 rounded-md min-h-[150px] flex items-center justify-center mt-4">
+                    <h2 id="question-text" class="text-3xl font-bold"></h2>
+                </div>
+                <div id="answers-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                    <!-- I pulsanti delle risposte verranno aggiunti qui -->
+                </div>
+                <div id="answered-state-info" class="hidden text-center mt-6">
+                    <p class="text-lg mb-4">Hai già risposto a questa domanda.</p>
+                    <button id="reset-question-btn" onclick="resetCurrentQuestion()" class="bg-yellow-500 hover:bg-yellow-600 font-bold py-2 px-6 rounded-md">Rispondi di Nuovo</button>
+                </div>
+                <div class="flex justify-between mt-8">
+                    <button id="prev-question-btn" onclick="playClickSound(); previousQuestion()" class="bg-white/20 hover:bg-white/30 font-bold py-2 px-6 rounded-md disabled:opacity-50">&lt; Precedente</button>
+                    <button id="next-question-btn" onclick="playClickSound(); nextQuestion()" class="bg-white/20 hover:bg-white/30 font-bold py-2 px-6 rounded-md disabled:opacity-50">Prossima &gt;</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Schermata di Intervallo -->
+        <div id="intermission-view" class="view text-center">
+            <div class="bg-white/10 p-12 rounded-lg shadow-2xl backdrop-blur-md w-full max-w-lg">
+                 <div id="quiz-header-intermission" class="text-center mb-6 border-b border-white/20 pb-4"></div>
+                <div id="result-feedback" class="text-7xl font-bold mb-4">Corretto!</div>
+                <div id="points-feedback" class="text-4xl">+ 850</div>
+            </div>
+        </div>
+
+        <!-- Schermata Fine Gioco -->
+        <div id="game-over-view" class="view text-center">
+             <div class="bg-white/10 p-12 rounded-lg shadow-2xl backdrop-blur-md">
+                <div id="quiz-header-gameover" class="text-center mb-6 border-b border-white/20 pb-4"></div>
+                <h2 class="text-5xl font-bold mb-4">Quiz Terminato!</h2>
+                <div id="final-judgement-icon" class="text-8xl mb-4"></div>
+                <p id="final-judgement-text" class="text-2xl font-semibold mb-6"></p>
+                <p class="text-xl mb-2">Il tuo punteggio finale è:</p>
+                <div class="flex items-baseline justify-center mb-8">
+                    <p id="final-score" class="text-6xl font-bold text-yellow-300">0</p>
+                    <p id="max-score" class="text-3xl font-bold text-white/70 ml-2"></p>
+                </div>
+                <button onclick="switchView('main-menu-view'); playClickSound();" class="bg-blue-500 hover:bg-blue-600 font-bold py-3 px-8 rounded-lg text-xl card-hover">Torna al Menu</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Controlli Muto -->
+    <div id="mute-controls">
+        <button id="mute-music-btn" onclick="toggleMusicMute()" class="p-3 bg-white/20 rounded-full card-hover backdrop-blur-sm">
+            <svg id="music-on-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+            <svg id="music-off-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><path d="M9 18V5l12-2v13"/><path d="m21 2-9 4.5"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        </button>
+        <button id="mute-sfx-btn" onclick="toggleSfxMute()" class="p-3 bg-white/20 rounded-full card-hover backdrop-blur-sm">
+            <svg id="sfx-on-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+            <svg id="sfx-off-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="hidden"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" x2="17" y1="9" y2="15"/><line x1="17" x2="23" y1="9" y2="15"/></svg>
+        </button>
+    </div>
+
+    <script>
+        // Stato dell'applicazione
+        let currentQuiz = null;
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let questionIdCounter = 0;
+        let isMusicMuted = false;
+        let isSfxMuted = false;
+        
+        // Stato del Gioco per domanda
+        let attemptsLeft = 0;
+        let firstAttemptOnQuestion = true;
+
+        // Stato del Timer
+        let timerInterval = null;
+        const TIME_PER_QUESTION = 20;
+        let timeLeft = TIME_PER_QUESTION;
+        let isTimerPaused = true;
+        
+        // Colori per i pulsanti delle risposte
+        const answerColors = ['answer-btn-red', 'answer-btn-blue', 'answer-btn-yellow', 'answer-btn-green'];
+
+        // --- Inizializzazione Effetti Sonori Migliorati ---
+        const sfxChannel = new Tone.Volume(-6).toDestination();
+        const correctSound = new Tone.PolySynth(Tone.FMSynth, {
+            harmonicity: 2.5,
+            modulationIndex: 15,
+            envelope: { attack: 0.01, decay: 0.2, release: 0.4 },
+            modulation: { type: "sine" },
+            modulationEnvelope: { attack: 0.01, decay: 0.5, release: 0.1 }
+        }).connect(sfxChannel);
+        
+        const incorrectSound = new Tone.MonoSynth({
+            oscillator: { type: 'sawtooth' }, envelope: { attack: 0.01, decay: 0.3, release: 0.2 }
+        }).connect(sfxChannel);
+        const startQuizSound = new Tone.PolySynth(Tone.Synth).connect(sfxChannel);
+        const winSound = new Tone.PolySynth(Tone.Synth).connect(sfxChannel);
+        const loseSound = new Tone.PolySynth(Tone.Synth).connect(sfxChannel);
+        const buttonClickSound = new Tone.MembraneSynth({
+            pitchDecay: 0.01, octaves: 6, envelope: { attack: 0.001, decay: 0.2, sustain: 0.01, release: 0.2 }
+        }).connect(sfxChannel);
+        const timerTickSound = new Tone.MetalSynth({
+            frequency: 400, envelope: { attack: 0.001, decay: 0.1, release: 0.01 },
+            harmonicity: 3.1, modulationIndex: 16, resonance: 4000, octaves: 1.5
+        }).connect(sfxChannel);
+
+        const backgroundMusicSynth = new Tone.PolySynth(Tone.Synth, {
+            oscillator: { type: "triangle8" },
+            envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.4 }
+        }).toDestination();
+        backgroundMusicSynth.volume.value = -12;
+
+        const musicPattern = new Tone.Sequence((time, note) => {
+            backgroundMusicSynth.triggerAttackRelease(note, "16n", time);
+        }, ["C4", "E4", "G4", "C5", "A4", "G4", "F4", "G4", "D4", "F4", "A4", "F4", "G4", "B4", "D5", "B4"], "8n");
+        musicPattern.loop = true;
+        Tone.Transport.bpm.value = 140; 
+        
+        // --- Funzioni Audio ---
+        async function initializeAudio() {
+            await Tone.start();
+            console.log("Audio context started!");
+            document.getElementById('audio-unlock-overlay').classList.remove('active');
+            switchView('main-menu-view');
+            playClickSound();
+        }
+        function playSound(sound, notes, duration, time) {
+            if (Tone.context.state !== 'running') return;
+            sound.triggerAttackRelease(notes, duration, time);
+        }
+        function playClickSound() {
+            playSound(buttonClickSound, "C2", "8n", Tone.now());
+        }
+        function toggleMusicMute() {
+            isMusicMuted = !isMusicMuted;
+            backgroundMusicSynth.volume.value = isMusicMuted ? -Infinity : -12;
+            document.getElementById('music-on-icon').classList.toggle('hidden');
+            document.getElementById('music-off-icon').classList.toggle('hidden');
+            playClickSound();
+        }
+        function toggleSfxMute() {
+            isSfxMuted = !isSfxMuted;
+            sfxChannel.mute = isSfxMuted;
+            document.getElementById('sfx-on-icon').classList.toggle('hidden');
+            document.getElementById('sfx-off-icon').classList.toggle('hidden');
+            playClickSound();
+        }
+
+        // --- Funzioni UI ---
+        function switchView(viewId) {
+            document.querySelectorAll('.view').forEach(view => {
+                if (view.id !== 'audio-unlock-overlay') view.classList.remove('active');
+            });
+            document.getElementById(viewId).classList.add('active');
+            if (viewId === 'main-menu-view') {
+                document.getElementById('play-quiz-section').classList.add('hidden');
+                document.getElementById('quiz-file-input').value = '';
+                currentQuiz = null;
+                musicPattern.stop();
+                if (Tone.Transport.state === 'started') Tone.Transport.stop();
+            } else if (viewId === 'quiz-creator-view') {
+                document.getElementById('quiz-title-input').value = '';
+                document.getElementById('quiz-subtitle-input').value = '';
+                document.getElementById('quiz-image-base64').value = '';
+                document.getElementById('quiz-preview-image').src = '';
+                document.getElementById('quiz-preview-image').classList.add('hidden');
+                document.getElementById('questions-container').innerHTML = '';
+                questionIdCounter = 0;
+                addQuestion();
+            }
+        }
+
+        function updateQuizHeaders() {
+            const title = currentQuiz.title;
+            const subtitle = currentQuiz.subtitle || '';
+            const headerHTML = `<h1 class="text-2xl font-bold">${title}</h1><p class="text-md text-white/80">${subtitle}</p>`;
+            
+            document.getElementById('quiz-header-player').innerHTML = headerHTML;
+            document.getElementById('quiz-header-intermission').innerHTML = headerHTML;
+            document.getElementById('quiz-header-gameover').innerHTML = headerHTML;
+        }
+
+        // --- Logica Creazione Quiz ---
+        function getAnswerEditorHTML(questionId, type) {
+             if (type === 'true-false') {
+                return `
+                    <div class="flex items-center col-span-1 md:col-span-2">
+                        <input type="radio" name="correct-answer-${questionId}" value="0" class="w-5 h-5 mr-3 accent-yellow-400" required>
+                        <label>Vero</label>
+                    </div>
+                    <div class="flex items-center col-span-1 md:col-span-2">
+                        <input type="radio" name="correct-answer-${questionId}" value="1" class="w-5 h-5 mr-3 accent-yellow-400" required>
+                        <label>Falso</label>
+                    </div>
+                `;
+            }
+            return [0,1,2,3].map(i => `
+                <div class="flex items-center">
+                    <input type="radio" name="correct-answer-${questionId}" value="${i}" class="w-5 h-5 mr-3 accent-yellow-400" required>
+                    <input type="text" placeholder="Risposta ${i + 1}" class="w-full p-2 rounded-md bg-white/20 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400" data-answer-text>
+                </div>
+            `).join('');
+        }
+        function updateQuestionEditor(questionId, type) {
+            const container = document.getElementById(`answers-editor-${questionId}`);
+            container.innerHTML = getAnswerEditorHTML(questionId, type);
+        }
+        function addQuestion() {
+            const questionId = questionIdCounter++;
+            const questionsContainer = document.getElementById('questions-container');
+            const questionCard = document.createElement('div');
+            questionCard.className = 'bg-white/10 p-6 rounded-lg mt-4 border border-white/20';
+            questionCard.id = `question-card-${questionId}`;
+            questionCard.innerHTML = `
+                <div class="flex justify-between items-center mb-4">
+                    <div class="flex items-center">
+                        <h3 class="text-xl font-semibold mr-4">Domanda ${questionId + 1}</h3>
+                        <select onchange="updateQuestionEditor(${questionId}, this.value)" data-question-type class="bg-white/20 p-2 rounded-md border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400">
+                            <option value="multiple-choice">Risposta Multipla</option>
+                            <option value="true-false">Vero o Falso</option>
+                        </select>
+                    </div>
+                    <button onclick="removeQuestion(${questionId}); playClickSound();" class="text-red-400 hover:text-red-600 font-bold">Rimuovi</button>
+                </div>
+                <textarea placeholder="Testo della domanda..." class="w-full p-2 rounded-md bg-white/20 border border-white/30 mb-4 h-24 resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400" data-question-text></textarea>
+                <div id="answers-editor-${questionId}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    ${getAnswerEditorHTML(questionId, 'multiple-choice')}
+                </div>
+            `;
+            questionsContainer.appendChild(questionCard);
+        }
+        function removeQuestion(questionId) {
+            document.getElementById(`question-card-${questionId}`).remove();
+        }
+        function saveQuiz() {
+            const title = document.getElementById('quiz-title-input').value.trim();
+            const subtitle = document.getElementById('quiz-subtitle-input').value.trim();
+            const imageBase64 = document.getElementById('quiz-image-base64').value;
+            if (!title) { alert("Per favore, inserisci un titolo per il quiz."); return; }
+            
+            const questions = [];
+            const questionCards = document.querySelectorAll('#questions-container > div');
+            for (const card of questionCards) {
+                const questionText = card.querySelector('[data-question-text]').value.trim();
+                const questionType = card.querySelector('[data-question-type]').value;
+                const correctAnswerInput = card.querySelector('input[type="radio"]:checked');
+
+                if (!questionText || !correctAnswerInput) {
+                     alert("Per favore, compila il testo e seleziona la risposta corretta per ogni domanda."); return;
+                }
+                let questionData = {
+                    question: questionText, type: questionType,
+                    correctAnswer: parseInt(correctAnswerInput.value), answers: []
+                };
+                if (questionType === 'multiple-choice') {
+                    const answerInputs = Array.from(card.querySelectorAll('[data-answer-text]'));
+                    questionData.answers = answerInputs.map(input => input.value.trim());
+                    if (questionData.answers.some(a => !a)) {
+                        alert("Per favore, compila tutti i campi delle risposte multiple."); return;
+                    }
+                } else { questionData.answers = ["Vero", "Falso"]; }
+                questions.push(questionData);
+            }
+            if (questions.length === 0) { alert("Il quiz deve avere almeno una domanda."); return; }
+            
+            const quizData = { title, subtitle, image: imageBase64 || null, questions };
+            const blob = new Blob([JSON.stringify(quizData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            
+            const safeTitle = title.replace(/[^a-z0-9_.-]/gi, '_').toLowerCase();
+            a.href = url; 
+            a.download = `${safeTitle || 'quiz'}.json`;
+
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            switchView('main-menu-view');
+        }
+
+        // --- Logica Gestione Immagini ---
+        function handleImageUpload(event, target) {
+            const file = event.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
+                const base64 = e.target.result;
+                if(target === 'quiz'){
+                    document.getElementById('quiz-image-base64').value = base64;
+                    const preview = document.getElementById('quiz-preview-image');
+                    preview.src = base64;
+                    preview.classList.remove('hidden');
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+        async function handleImageUrl(event, target) {
+            event.preventDefault();
+            const urlInput = document.getElementById(`image-url-${target}`);
+            const url = urlInput.value.trim(); if (!url) return;
+            const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
+            try {
+                const response = await fetch(proxyUrl);
+                if (!response.ok) throw new Error('Network response was not ok.');
+                const blob = await response.blob();
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const base64 = e.target.result;
+                     if(target === 'quiz'){
+                        document.getElementById('quiz-image-base64').value = base64;
+                        const preview = document.getElementById('quiz-preview-image');
+                        preview.src = base64;
+                        preview.classList.remove('hidden');
+                        urlInput.value = '';
+                    }
+                };
+                reader.readAsDataURL(blob);
+            } catch (error) {
+                console.error("Error fetching image from URL:", error);
+                alert("Impossibile caricare l'immagine dall'URL. Prova a scaricarla e caricarla come file.");
+            }
+        }
+        
+        // --- Logica Caricamento Quiz ---
+        function loadQuizFromFile(event) {
+            playClickSound();
+            const file = event.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const quizData = JSON.parse(e.target.result);
+                    if (!quizData.title || !quizData.questions) throw new Error("Formato del file non valido.");
+                    currentQuiz = quizData;
+                    let titleHtml = `Quiz Caricato: "${currentQuiz.title}"`;
+                    if (currentQuiz.subtitle) {
+                        titleHtml += `<br><span class="text-xl font-normal text-white/80">${currentQuiz.subtitle}</span>`;
+                    }
+                    document.getElementById('loaded-quiz-title').innerHTML = titleHtml;
+                    document.getElementById('play-quiz-section').classList.remove('hidden');
+                } catch (error) {
+                    alert("Errore nel caricamento: " + error.message);
+                    document.getElementById('play-quiz-section').classList.add('hidden');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // --- Logica di Gioco e Navigazione---
+        function startQuiz() {
+            const now = Tone.now();
+            playSound(startQuizSound, "C4", "8n", now);
+            playSound(startQuizSound, "E4", "8n", now + 0.1);
+            playSound(startQuizSound, "G4", "8n", now + 0.2);
+            playSound(startQuizSound, "C5", "8n", now + 0.3);
+            if (!currentQuiz) { alert("Nessun quiz caricato!"); return; }
+
+            currentQuiz.questions.forEach(q => {
+                q.isAnswered = false;
+                q.userScore = 0;
+            });
+
+            if (Tone.Transport.state !== 'started') Tone.Transport.start();
+            musicPattern.start(0);
+            score = 0; 
+            currentQuestionIndex = 0;
+            displayQuestion();
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIndex < currentQuiz.questions.length - 1) {
+                currentQuestionIndex++;
+                displayQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                displayQuestion();
+            }
+        }
+
+        function resetCurrentQuestion() {
+            playClickSound();
+            const questionState = currentQuiz.questions[currentQuestionIndex];
+            score -= questionState.userScore;
+            questionState.isAnswered = false;
+            questionState.userScore = 0;
+            displayQuestion();
+        }
+
+        function updateNavButtons() {
+            const prevBtn = document.getElementById('prev-question-btn');
+            const nextBtn = document.getElementById('next-question-btn');
+            
+            prevBtn.disabled = currentQuestionIndex === 0;
+            nextBtn.disabled = false;
+
+            if (currentQuestionIndex === currentQuiz.questions.length - 1) {
+                nextBtn.textContent = 'Fine Quiz';
+            } else {
+                nextBtn.textContent = 'Prossima >';
+            }
+        }
+
+        function displayQuestion() {
+            if (currentQuestionIndex >= currentQuiz.questions.length) { endGame(); return; }
+            
+            switchView('quiz-player-view');
+            updateQuizHeaders();
+            updateNavButtons();
+
+            const questionState = currentQuiz.questions[currentQuestionIndex];
+            
+            document.getElementById('question-counter').textContent = `Domanda ${currentQuestionIndex + 1} / ${currentQuiz.questions.length}`;
+            document.getElementById('score-display').textContent = `Punteggio: ${score}`;
+            document.getElementById('question-text').textContent = questionState.question;
+            
+            const imageContainer = document.getElementById('question-image-container');
+            const imageEl = document.getElementById('question-image');
+            if (currentQuiz.image) {
+                imageEl.src = currentQuiz.image;
+                imageContainer.classList.remove('hidden');
+            } else {
+                imageContainer.classList.add('hidden');
+                imageEl.src = '';
+            }
+
+            const answersGrid = document.getElementById('answers-grid');
+            const answeredInfo = document.getElementById('answered-state-info');
+            answersGrid.innerHTML = '';
+
+            if (questionState.isAnswered) {
+                answeredInfo.classList.remove('hidden');
+                answersGrid.classList.remove('hidden');
+
+                document.getElementById('timer-toggle-btn').disabled = true;
+                if(timerInterval) clearInterval(timerInterval);
+                document.getElementById('timer-display').textContent = TIME_PER_QUESTION;
+
+                if(questionState.type === 'true-false') {
+                     answersGrid.innerHTML = `
+                        <button class="p-4 rounded-lg text-xl font-semibold text-white card-hover answer-btn-blue opacity-50" disabled>Vero</button>
+                        <button class="p-4 rounded-lg text-xl font-semibold text-white card-hover answer-btn-red opacity-50" disabled>Falso</button>
+                     `;
+                } else {
+                    const colors = ['answer-btn-red', 'answer-btn-blue', 'answer-btn-yellow', 'answer-btn-green'];
+                    questionState.answers.forEach((answer, index) => {
+                        const button = document.createElement('button');
+                        button.textContent = answer;
+                        button.className = `p-4 rounded-lg text-xl font-semibold text-white card-hover ${colors[index]} opacity-50`;
+                        button.disabled = true;
+                        answersGrid.appendChild(button);
+                    });
+                }
+            } else {
+                answeredInfo.classList.add('hidden');
+                answersGrid.classList.remove('hidden');
+                
+                attemptsLeft = questionState.answers.length;
+                firstAttemptOnQuestion = true;
+                setupTimer();
+                
+                if(questionState.type === 'true-false') {
+                     answersGrid.innerHTML = `
+                        <button class="p-4 rounded-lg text-xl font-semibold text-white card-hover answer-btn-blue" onclick="handleAnswer(0, this)">Vero</button>
+                        <button class="p-4 rounded-lg text-xl font-semibold text-white card-hover answer-btn-red" onclick="handleAnswer(1, this)">Falso</button>
+                     `;
+                } else {
+                    const shuffledColors = [...answerColors].sort(() => Math.random() - 0.5);
+                    questionState.answers.forEach((answer, index) => {
+                        const button = document.createElement('button');
+                        button.textContent = answer;
+                        button.className = `p-4 rounded-lg text-xl font-semibold text-white card-hover ${shuffledColors[index]}`;
+                        button.onclick = (event) => handleAnswer(index, event.target);
+                        answersGrid.appendChild(button);
+                    });
+                }
+            }
+        }
+        
+        // --- Logica Timer ---
+        function setupTimer() {
+            if (timerInterval) clearInterval(timerInterval);
+            isTimerPaused = true; timeLeft = TIME_PER_QUESTION;
+            const timerDisplay = document.getElementById('timer-display');
+            const toggleBtn = document.getElementById('timer-toggle-btn');
+            timerDisplay.textContent = timeLeft;
+            toggleBtn.textContent = 'Avvia';
+            toggleBtn.disabled = false;
+            toggleBtn.classList.remove('bg-yellow-500', 'hover:bg-yellow-600');
+            toggleBtn.classList.add('bg-green-500', 'hover:bg-green-600');
+        }
+        function toggleTimer() {
+            isTimerPaused = !isTimerPaused;
+            const toggleBtn = document.getElementById('timer-toggle-btn');
+            if (isTimerPaused) {
+                clearInterval(timerInterval);
+                toggleBtn.textContent = 'Avvia';
+                toggleBtn.classList.remove('bg-yellow-500', 'hover:bg-yellow-600');
+                toggleBtn.classList.add('bg-green-500', 'hover:bg-green-600');
+            } else {
+                toggleBtn.textContent = 'Pausa';
+                toggleBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
+                toggleBtn.classList.add('bg-yellow-500', 'hover:bg-yellow-600');
+                timerInterval = setInterval(() => {
+                    timeLeft--;
+                    document.getElementById('timer-display').textContent = timeLeft;
+                    if (timeLeft <= 5 && timeLeft > 0) playSound(timerTickSound, "C5", "16n", Tone.now());
+                    if (timeLeft <= 0) { clearInterval(timerInterval); handleTimeout(); }
+                }, 1000);
+            }
+        }
+        function handleTimeout() {
+            playSound(incorrectSound, "G2", "4n", Tone.now());
+            document.querySelectorAll('#answers-grid button').forEach(btn => btn.disabled = true);
+            const questionState = currentQuiz.questions[currentQuestionIndex];
+            questionState.isAnswered = true;
+            questionState.userScore = 0;
+            showIntermission(null, 0);
+        }
+
+        function handleAnswer(selectedIndex, selectedButton) {
+            if (firstAttemptOnQuestion) {
+                clearInterval(timerInterval);
+                isTimerPaused = true; firstAttemptOnQuestion = false;
+                document.getElementById('timer-toggle-btn').disabled = true;
+            }
+            const questionData = currentQuiz.questions[currentQuestionIndex];
+            const isCorrect = selectedIndex === questionData.correctAnswer;
+            if (isCorrect) {
+                let pointsWon = 0;
+                if (attemptsLeft >= 4) pointsWon = 500 + Math.round(500 * (timeLeft / TIME_PER_QUESTION));
+                else if (attemptsLeft === 3) pointsWon = 250 + Math.round(250 * (timeLeft / TIME_PER_QUESTION));
+                else if (attemptsLeft === 2) pointsWon = 100 + Math.round(100 * (timeLeft / TIME_PER_QUESTION));
+                
+                score += pointsWon;
+                questionData.isAnswered = true;
+                questionData.userScore = pointsWon;
+
+                document.querySelectorAll('#answers-grid button').forEach(btn => btn.disabled = true);
+                selectedButton.classList.add('border-4', 'border-yellow-300', 'animate-pulse');
+                const now = Tone.now();
+                playSound(correctSound, "C5", "16n", now);
+                playSound(correctSound, "E5", "16n", now + 0.1);
+                playSound(correctSound, "G5", "16n", now + 0.2);
+                playSound(correctSound, "C6", "16n", now + 0.3);
+                setTimeout(() => { showIntermission(true, pointsWon); }, 1500);
+            } else {
+                selectedButton.disabled = true;
+                selectedButton.classList.add('opacity-50', 'pointer-events-none');
+                playSound(incorrectSound, "C3", "4n", Tone.now());
+                attemptsLeft--;
+            }
+        }
+        
+        function showIntermission(isCorrect, pointsWon) {
+            switchView('intermission-view');
+            updateQuizHeaders();
+            const resultFeedback = document.getElementById('result-feedback');
+            const pointsFeedback = document.getElementById('points-feedback');
+            if (isCorrect === true) {
+                 resultFeedback.textContent = "Corretto!";
+                 resultFeedback.style.color = '#22c55e';
+                 pointsFeedback.textContent = `+ ${pointsWon}`;
+            } else {
+                 resultFeedback.textContent = "Tempo Scaduto!";
+                 resultFeedback.style.color = '#eab308';
+                 pointsFeedback.textContent = '';
+            }
+            setTimeout(() => {
+                nextQuestion();
+            }, 2000);
+        }
+
+        function endGame() {
+            playClickSound();
+            musicPattern.stop(); Tone.Transport.stop();
+            switchView('game-over-view');
+            updateQuizHeaders();
+
+            const maxScore = currentQuiz.questions.length * 1000;
+            const percentage = maxScore > 0 ? (score / maxScore) * 100 : 0;
+            const now = Tone.now();
+            const iconEl = document.getElementById('final-judgement-icon');
+            const textEl = document.getElementById('final-judgement-text');
+            if (percentage >= 50) {
+                playSound(winSound, "C5", "8n", now); playSound(winSound, "E5", "8n", now + 0.1);
+                playSound(winSound, "G5", "8n", now + 0.2); playSound(winSound, "C6", "4n", now + 0.3);
+                if (percentage >= 80) { iconEl.textContent = '🏆'; textEl.textContent = 'Eccellente!'; }
+                else { iconEl.textContent = '🥈'; textEl.textContent = 'Ben Fatto!'; }
+            } else {
+                playSound(loseSound, "G3", "8n", now); playSound(loseSound, "E3", "8n", now + 0.2);
+                playSound(loseSound, "C3", "4n", now + 0.4);
+                if (percentage >= 20) { iconEl.textContent = '🥉'; textEl.textContent = 'Puoi Migliorare!'; }
+                else { iconEl.textContent = '📖'; textEl.textContent = 'Continua a Studiare!'; }
+            }
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('max-score').textContent = `/ ${maxScore}`;
+        }
+
+    </script>
+</body>
+</html>
+
