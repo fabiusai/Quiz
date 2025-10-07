@@ -109,6 +109,15 @@
         <!-- Schermata Creazione Quiz -->
         <div id="quiz-creator-view" class="view bg-white/10 p-8 rounded-lg shadow-2xl backdrop-blur-md">
             <h2 class="text-3xl font-bold mb-6 text-center">Crea il Tuo Quiz</h2>
+            <div class="flex justify-center gap-4 mb-6 border-b border-white/20 pb-6">
+                <label for="quiz-file-input-editor" class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded-lg cursor-pointer card-hover">
+                    📂 Carica Quiz
+                    <input type="file" id="quiz-file-input-editor" class="hidden" accept=".json, .txt" onchange="loadQuizFromFileAndEdit(event)">
+                </label>
+                <a href="https://fabiusai.github.io/Quiz/prompt.html" target="_blank" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-lg card-hover">
+                    ✨ Genera Prompt
+                </a>
+            </div>
             <div class="mb-4">
                 <label for="quiz-title-input" class="block text-lg font-medium mb-2">Titolo del Quiz:</label>
                 <input type="text" id="quiz-title-input" placeholder="Es: Capitali del Mondo" class="w-full p-3 rounded-md bg-white/20 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400">
@@ -141,7 +150,8 @@
                 <button onclick="addQuestion(); playClickSound();" class="bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded-md card-hover">+ Aggiungi Domanda</button>
                 <div>
                     <button onclick="switchView('main-menu-view'); playClickSound();" class="bg-gray-500 hover:bg-gray-600 font-bold py-2 px-4 rounded-md card-hover mr-2">Annulla</button>
-                    <button onclick="saveQuiz(); playClickSound();" class="bg-green-500 hover:bg-green-600 font-bold py-2 px-4 rounded-md card-hover">Salva Quiz</button>
+                    <button onclick="saveQuiz(); playClickSound();" class="bg-green-500 hover:bg-green-600 font-bold py-2 px-4 rounded-md card-hover mr-2">Salva Quiz</button>
+                    <button onclick="playEditedQuiz()" class="bg-blue-600 hover:bg-blue-700 font-bold py-2 px-4 rounded-md card-hover">Gioca</button>
                 </div>
             </div>
         </div>
@@ -441,12 +451,15 @@
             updateQuestionNumbers();
         }
 
-        function saveQuiz() {
+        function getQuizDataFromEditor() {
             const title = document.getElementById('quiz-title-input').value.trim();
             const subtitle = document.getElementById('quiz-subtitle-input').value.trim();
             const imageBase64 = document.getElementById('quiz-image-base64').value;
-            if (!title) { alert("Per favore, inserisci un titolo per il quiz."); return; }
-            
+            if (!title) {
+                alert("Per favore, inserisci un titolo per il quiz.");
+                return null;
+            }
+
             const questions = [];
             const questionCards = document.querySelectorAll('#questions-container > div');
             for (const card of questionCards) {
@@ -455,7 +468,8 @@
                 const correctAnswerInput = card.querySelector('input[type="radio"]:checked');
 
                 if (!questionText || !correctAnswerInput) {
-                     alert("Per favore, compila il testo e seleziona la risposta corretta per ogni domanda."); return;
+                    alert("Per favore, compila il testo e seleziona la risposta corretta per ogni domanda.");
+                    return null;
                 }
                 let questionData = {
                     question: questionText, type: questionType,
@@ -465,26 +479,45 @@
                     const answerInputs = Array.from(card.querySelectorAll('[data-answer-text]'));
                     questionData.answers = answerInputs.map(input => input.value.trim());
                     if (questionData.answers.some(a => !a)) {
-                        alert("Per favore, compila tutti i campi delle risposte multiple."); return;
+                        alert("Per favore, compila tutti i campi delle risposte multiple.");
+                        return null;
                     }
                 } else { questionData.answers = ["Vero", "Falso"]; }
                 questions.push(questionData);
             }
-            if (questions.length === 0) { alert("Il quiz deve avere almeno una domanda."); return; }
+            if (questions.length === 0) {
+                alert("Il quiz deve avere almeno una domanda.");
+                return null;
+            }
             
-            const quizData = { title, subtitle, image: imageBase64 || null, questions };
+            return { title, subtitle, image: imageBase64 || null, questions };
+        }
+
+        function saveQuiz() {
+            const quizData = getQuizDataFromEditor();
+            if (!quizData) return;
+
             const blob = new Blob([JSON.stringify(quizData, null, 2)], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             
-            const safeTitle = title.replace(/[^a-z0-9_.-]/gi, '_').toLowerCase();
+            const safeTitle = quizData.title.replace(/[^a-z0-9_.-]/gi, '_').toLowerCase();
             a.href = url; 
             a.download = `${safeTitle || 'quiz'}.json`;
 
             document.body.appendChild(a); a.click(); document.body.removeChild(a);
             URL.revokeObjectURL(url);
-            currentQuiz = null; // Clear current quiz after saving
+            currentQuiz = null; 
             switchView('main-menu-view');
+        }
+
+        function playEditedQuiz() {
+            playClickSound();
+            const quizData = getQuizDataFromEditor();
+            if (!quizData) return;
+
+            currentQuiz = quizData;
+            startQuiz();
         }
 
         // --- Logica Gestione Immagini ---
@@ -548,6 +581,27 @@
                 } catch (error) {
                     alert("Errore nel caricamento: " + error.message);
                     document.getElementById('play-quiz-section').classList.add('hidden');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function loadQuizFromFileAndEdit(event) {
+            playClickSound();
+            const file = event.target.files[0]; if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const quizData = JSON.parse(e.target.result);
+                    if (!quizData.title || !quizData.questions) throw new Error("Formato del file non valido.");
+                    currentQuiz = quizData;
+                    // Directly load the data into the editor
+                    loadQuizForEditing();
+                } catch (error) {
+                    alert("Errore nel caricamento: " + error.message);
+                } finally {
+                    // Reset the file input so the same file can be loaded again
+                    event.target.value = '';
                 }
             };
             reader.readAsText(file);
