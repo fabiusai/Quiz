@@ -94,9 +94,14 @@
                 </div>
                 <div id="play-quiz-section" class="mt-8 hidden">
                      <h2 id="loaded-quiz-title" class="text-3xl font-bold mb-4"></h2>
-                     <button onclick="startQuiz()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-lg text-2xl card-hover">
-                         ▶️ Gioca!
-                     </button>
+                     <div class="flex justify-center gap-4">
+                        <button onclick="loadQuizForEditing()" class="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-4 px-8 rounded-lg text-2xl card-hover">
+                            ✏️ Modifica
+                        </button>
+                        <button onclick="startQuiz()" class="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-lg text-2xl card-hover">
+                            ▶️ Gioca!
+                        </button>
+                     </div>
                  </div>
             </div>
         </div>
@@ -312,14 +317,17 @@
                 musicPattern.stop();
                 if (Tone.Transport.state === 'started') Tone.Transport.stop();
             } else if (viewId === 'quiz-creator-view') {
-                document.getElementById('quiz-title-input').value = '';
-                document.getElementById('quiz-subtitle-input').value = '';
-                document.getElementById('quiz-image-base64').value = '';
-                document.getElementById('quiz-preview-image').src = '';
-                document.getElementById('quiz-preview-image').classList.add('hidden');
-                document.getElementById('questions-container').innerHTML = '';
-                questionIdCounter = 0;
-                addQuestion();
+                // Clear fields only for a new quiz, not for an edit
+                if (!currentQuiz) {
+                    document.getElementById('quiz-title-input').value = '';
+                    document.getElementById('quiz-subtitle-input').value = '';
+                    document.getElementById('quiz-image-base64').value = '';
+                    document.getElementById('quiz-preview-image').src = '';
+                    document.getElementById('quiz-preview-image').classList.add('hidden');
+                    document.getElementById('questions-container').innerHTML = '';
+                    questionIdCounter = 0;
+                    addQuestion();
+                }
             }
         }
 
@@ -358,7 +366,8 @@
             const container = document.getElementById(`answers-editor-${questionId}`);
             container.innerHTML = getAnswerEditorHTML(questionId, type);
         }
-        function addQuestion() {
+        
+        function addQuestion(questionData = null) {
             const questionId = questionIdCounter++;
             const questionsContainer = document.getElementById('questions-container');
             const questionCard = document.createElement('div');
@@ -367,24 +376,71 @@
             questionCard.innerHTML = `
                 <div class="flex justify-between items-center mb-4">
                     <div class="flex items-center">
-                        <h3 class="text-xl font-semibold mr-4">Domanda ${questionId + 1}</h3>
+                        <h3 class="text-xl font-semibold mr-4" data-question-number>Domanda ${questionId + 1}</h3>
+                        <div class="flex flex-col gap-1 ml-4">
+                            <button onclick="moveQuestion(${questionId}, 'up')" class="text-xs p-1 leading-none">▲</button>
+                            <button onclick="moveQuestion(${questionId}, 'down')" class="text-xs p-1 leading-none">▼</button>
+                        </div>
+                    </div>
+                    <div>
                         <select onchange="updateQuestionEditor(${questionId}, this.value)" data-question-type class="bg-white/20 p-2 rounded-md border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400">
                             <option value="multiple-choice">Risposta Multipla</option>
                             <option value="true-false">Vero o Falso</option>
                         </select>
+                        <button onclick="removeQuestion(${questionId}); playClickSound();" class="text-red-400 hover:text-red-600 font-bold ml-4">Rimuovi</button>
                     </div>
-                    <button onclick="removeQuestion(${questionId}); playClickSound();" class="text-red-400 hover:text-red-600 font-bold">Rimuovi</button>
                 </div>
                 <textarea placeholder="Testo della domanda..." class="w-full p-2 rounded-md bg-white/20 border border-white/30 mb-4 h-24 resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400" data-question-text></textarea>
                 <div id="answers-editor-${questionId}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    ${getAnswerEditorHTML(questionId, 'multiple-choice')}
+                    <!-- Contenuto dinamico -->
                 </div>
             `;
             questionsContainer.appendChild(questionCard);
+
+            if (questionData) {
+                questionCard.querySelector('[data-question-text]').value = questionData.question;
+                const typeSelect = questionCard.querySelector('[data-question-type]');
+                typeSelect.value = questionData.type;
+                updateQuestionEditor(questionId, questionData.type);
+
+                if (questionData.type === 'multiple-choice') {
+                    const answerInputs = questionCard.querySelectorAll('[data-answer-text]');
+                    answerInputs.forEach((input, i) => {
+                        input.value = questionData.answers[i] || '';
+                    });
+                }
+                const correctRadio = questionCard.querySelector(`input[value="${questionData.correctAnswer}"]`);
+                if(correctRadio) correctRadio.checked = true;
+
+            } else {
+                updateQuestionEditor(questionId, 'multiple-choice');
+            }
         }
+
+        function updateQuestionNumbers() {
+            const questionCards = document.querySelectorAll('#questions-container > div');
+            questionCards.forEach((card, index) => {
+                card.querySelector('[data-question-number]').textContent = `Domanda ${index + 1}`;
+            });
+        }
+
+        function moveQuestion(questionId, direction) {
+            const questionCard = document.getElementById(`question-card-${questionId}`);
+            const container = questionCard.parentElement;
+
+            if (direction === 'up' && questionCard.previousElementSibling) {
+                container.insertBefore(questionCard, questionCard.previousElementSibling);
+            } else if (direction === 'down' && questionCard.nextElementSibling) {
+                container.insertBefore(questionCard.nextElementSibling, questionCard);
+            }
+            updateQuestionNumbers();
+        }
+
         function removeQuestion(questionId) {
             document.getElementById(`question-card-${questionId}`).remove();
+            updateQuestionNumbers();
         }
+
         function saveQuiz() {
             const title = document.getElementById('quiz-title-input').value.trim();
             const subtitle = document.getElementById('quiz-subtitle-input').value.trim();
@@ -427,6 +483,7 @@
 
             document.body.appendChild(a); a.click(); document.body.removeChild(a);
             URL.revokeObjectURL(url);
+            currentQuiz = null; // Clear current quiz after saving
             switchView('main-menu-view');
         }
 
@@ -472,7 +529,7 @@
             }
         }
         
-        // --- Logica Caricamento Quiz ---
+        // --- Logica Caricamento e Modifica Quiz ---
         function loadQuizFromFile(event) {
             playClickSound();
             const file = event.target.files[0]; if (!file) return;
@@ -494,6 +551,26 @@
                 }
             };
             reader.readAsText(file);
+        }
+        
+        function loadQuizForEditing() {
+            if (!currentQuiz) return;
+            switchView('quiz-creator-view');
+            
+            document.getElementById('quiz-title-input').value = currentQuiz.title;
+            document.getElementById('quiz-subtitle-input').value = currentQuiz.subtitle || '';
+            const imageBase64 = currentQuiz.image || '';
+            document.getElementById('quiz-image-base64').value = imageBase64;
+            if (imageBase64) {
+                 const preview = document.getElementById('quiz-preview-image');
+                 preview.src = imageBase64;
+                 preview.classList.remove('hidden');
+            }
+            
+            const questionsContainer = document.getElementById('questions-container');
+            questionsContainer.innerHTML = '';
+            questionIdCounter = 0;
+            currentQuiz.questions.forEach(q => addQuestion(q));
         }
 
         // --- Logica di Gioco e Navigazione---
