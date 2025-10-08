@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Quiz Editor</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .modal-backdrop {
+            background-color: rgba(0,0,0,0.5);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 antialiased">
+
+    <div id="app" class="container mx-auto p-4 md:p-8 max-w-4xl">
+        <header class="mb-8 text-center">
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-white">JSON Quiz Editor</h1>
+            <p class="text-gray-600 dark:text-gray-400 mt-2">Crea, modifica e gestisci i tuoi file di configurazione per i quiz.</p>
+        </header>
+
+        <!-- Controlli principali -->
+        <div class="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md mb-6 flex flex-col sm:flex-row items-center gap-4">
+            <input type="search" id="searchInput" placeholder="Cerca per titolo o descrizione..." class="w-full sm:flex-grow p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <div class="flex items-center gap-2 w-full sm:w-auto">
+                <button id="addBtn" class="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300">Aggiungi</button>
+                <label for="importFile" class="w-full sm:w-auto bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-md cursor-pointer text-center transition duration-300">Importa</label>
+                <input type="file" id="importFile" class="hidden" accept=".json">
+                <button id="exportBtn" class="w-full sm:w-auto bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded-md transition duration-300">Esporta</button>
+            </div>
+        </div>
+
+        <!-- Lista delle voci JSON -->
+        <div id="jsonList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <!-- Le voci verranno inserite qui da JavaScript -->
+        </div>
+        <p id="noResults" class="text-center text-gray-500 mt-8 hidden">Nessun risultato trovato.</p>
+    </div>
+
+    <!-- Modale per Aggiungere/Modificare -->
+    <div id="entryModal" class="fixed inset-0 z-50 flex items-center justify-center modal-backdrop hidden">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6 w-full max-w-lg m-4">
+            <h2 id="modalTitle" class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Aggiungi Voce</h2>
+            <form id="entryForm">
+                <input type="hidden" id="entryIndex">
+                <div class="mb-4">
+                    <label for="entryId" class="block text-sm font-medium text-gray-700 dark:text-gray-300">ID</label>
+                    <input type="text" id="entryId" class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="mb-4">
+                    <label for="entryTitle" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Title</label>
+                    <input type="text" id="entryTitle" class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="mb-4">
+                    <label for="entryDescription" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
+                    <textarea id="entryDescription" rows="3" class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" required></textarea>
+                </div>
+                <div class="mb-6">
+                    <label for="entryPath" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Path</label>
+                    <input type="text" id="entryPath" class="mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+                </div>
+                <div class="flex justify-end gap-4">
+                    <button type="button" id="cancelBtn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded-md transition duration-300">Annulla</button>
+                    <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-md transition duration-300">Salva</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const jsonList = document.getElementById('jsonList');
+        const searchInput = document.getElementById('searchInput');
+        const addBtn = document.getElementById('addBtn');
+        const exportBtn = document.getElementById('exportBtn');
+        const importFile = document.getElementById('importFile');
+        const entryModal = document.getElementById('entryModal');
+        const entryForm = document.getElementById('entryForm');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const modalTitle = document.getElementById('modalTitle');
+        const noResults = document.getElementById('noResults');
+
+        let data = [
+            {
+                "id": "storia01",
+                "title": "Storia dell'Antica Roma",
+                "description": "Un quiz sui personaggi e gli eventi chiave della Roma antica.",
+                "path": "quizzes/storia_romana.json"
+            },
+            {
+                "id": "geo01",
+                "title": "Capitali del Mondo",
+                "description": "Quanto conosci le capitali dei paesi del mondo? Mettiti alla prova!",
+                "path": "quizzes/geografia_mondo.json"
+            },
+            {
+                "id": "scienze01",
+                "title": "Basi di Scienze",
+                "description": "Domande fondamentali di biologia, chimica e fisica.",
+                "path": "quizzes/scienze_base.json"
+            }
+        ];
+
+        // Funzione per renderizzare la lista
+        const renderList = (items = data) => {
+            jsonList.innerHTML = '';
+            if (items.length === 0) {
+                noResults.classList.remove('hidden');
+            } else {
+                noResults.classList.add('hidden');
+            }
+            items.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md flex flex-col';
+                div.innerHTML = `
+                    <div class="flex-grow">
+                        <h3 class="text-xl font-bold text-blue-600 dark:text-blue-400">${item.title}</h3>
+                        <p class="text-gray-600 dark:text-gray-400 my-2">${item.description}</p>
+                        <div class="mt-2 text-sm">
+                            <span class="font-semibold text-gray-700 dark:text-gray-300">ID:</span>
+                            <code class="bg-gray-200 dark:bg-gray-700 p-1 rounded-md text-gray-800 dark:text-gray-200">${item.id}</code>
+                        </div>
+                        <div class="mt-1 text-sm">
+                             <span class="font-semibold text-gray-700 dark:text-gray-300">Path:</span>
+                            <code class="bg-gray-200 dark:bg-gray-700 p-1 rounded-md text-gray-800 dark:text-gray-200">${item.path}</code>
+                        </div>
+                    </div>
+                    <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700 flex justify-end gap-2">
+                        <button class="edit-btn bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-1 px-3 rounded text-sm transition" data-index="${index}">Modifica</button>
+                        <button class="delete-btn bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-3 rounded text-sm transition" data-index="${index}">Elimina</button>
+                    </div>
+                `;
+                jsonList.appendChild(div);
+            });
+        };
+        
+        // Funzioni per la modale
+        const openModal = (mode = 'add', index = null) => {
+            entryForm.reset();
+            document.getElementById('entryIndex').value = '';
+
+            if (mode === 'edit' && index !== null) {
+                modalTitle.textContent = 'Modifica Voce';
+                const item = data[index];
+                document.getElementById('entryIndex').value = index;
+                document.getElementById('entryId').value = item.id;
+                document.getElementById('entryTitle').value = item.title;
+                document.getElementById('entryDescription').value = item.description;
+                document.getElementById('entryPath').value = item.path;
+            } else {
+                modalTitle.textContent = 'Aggiungi Voce';
+            }
+            entryModal.classList.remove('hidden');
+        };
+
+        const closeModal = () => {
+            entryModal.classList.add('hidden');
+        };
+
+        // Gestione degli eventi
+        searchInput.addEventListener('input', (e) => {
+            const searchTerm = e.target.value.toLowerCase();
+            const filteredData = data.filter(item => 
+                item.title.toLowerCase().includes(searchTerm) || 
+                item.description.toLowerCase().includes(searchTerm)
+            );
+            renderList(filteredData);
+        });
+
+        addBtn.addEventListener('click', () => openModal('add'));
+        cancelBtn.addEventListener('click', closeModal);
+        
+        entryForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const entryIndex = document.getElementById('entryIndex').value;
+            const newItem = {
+                id: document.getElementById('entryId').value,
+                title: document.getElementById('entryTitle').value,
+                description: document.getElementById('entryDescription').value,
+                path: document.getElementById('entryPath').value,
+            };
+
+            if (entryIndex) {
+                data[parseInt(entryIndex)] = newItem;
+            } else {
+                data.push(newItem);
+            }
+            
+            searchInput.value = '';
+            renderList();
+            closeModal();
+        });
+
+        jsonList.addEventListener('click', (e) => {
+            if (e.target.classList.contains('edit-btn')) {
+                const index = e.target.dataset.index;
+                openModal('edit', parseInt(index));
+            }
+            if (e.target.classList.contains('delete-btn')) {
+                const index = e.target.dataset.index;
+                // Semplice conferma senza usare `confirm()` che potrebbe essere bloccato
+                if(confirm('Sei sicuro di voler eliminare questa voce?')) {
+                    data.splice(index, 1);
+                    renderList();
+                }
+            }
+        });
+
+        // Import / Export
+        exportBtn.addEventListener('click', () => {
+            const jsonString = JSON.stringify(data, null, 2);
+            const blob = new Blob([jsonString], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'config.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        });
+
+        importFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                try {
+                    const importedData = JSON.parse(event.target.result);
+                    // Semplice validazione per vedere se è un array
+                    if (Array.isArray(importedData)) {
+                        data = importedData;
+                        renderList();
+                    } else {
+                        alert('Il file JSON non ha il formato corretto (deve essere un array).');
+                    }
+                } catch (error) {
+                    alert('Errore durante la lettura del file JSON.');
+                    console.error("JSON Parse Error:", error);
+                }
+            };
+            reader.readAsText(file);
+            // Resetta l'input per permettere di caricare lo stesso file di nuovo
+            e.target.value = '';
+        });
+
+        // Render iniziale
+        renderList();
+    });
+</script>
+</body>
+</html>
