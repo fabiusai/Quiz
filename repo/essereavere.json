@@ -185,9 +185,9 @@
       "type": "multiple-choice",
       "correctAnswer": 1,
       "answers": [
-        "Prima (-are)",
-        "Seconda (-ere)",
-        "Terza (-ire)",
+        "Prima",
+        "Seconda",
+        "Terza",
         "Nessuna delle precedenti"
       ]
     },
@@ -203,7 +203,7 @@
       ]
     },
     {
-      "question": "La frase \"Non sapevo che esistessero così tante specie di coralli\" usa il verbo \"essere\" con significato di \"esistere\".",
+      "question": "La frase \"Non sapevo che ci fossero così tante specie di coralli\" usa il verbo \"essere\" con significato di \"esistere\".",
       "type": "true-false",
       "correctAnswer": 0,
       "answers": [
