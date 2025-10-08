@@ -34,7 +34,7 @@
         .answer-btn-yellow { background-color: #eab308; }
         .answer-btn-green { background-color: #22c55e; }
         
-        #quiz-player-view.active, #quiz-creator-view.active {
+        #quiz-player-view.active, #quiz-creator-view.active, #repository-view.active {
              display: block; /* Manteniamo block per le view complesse */
         }
         #audio-unlock-overlay {
@@ -74,19 +74,26 @@
 
 
     <div id="app-container" class="w-full max-w-4xl mx-auto relative">
+        
+        <button id="home-btn" onclick="goToHome()" class="hidden fixed top-4 left-4 z-50 p-3 bg-white/20 rounded-full card-hover backdrop-blur-sm" title="Torna al menu principale">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </button>
 
         <div id="main-menu-view" class="view text-center">
             <div>
                 <h1 class="text-5xl font-bold mb-4 animate-pulse">Quiz Master</h1>
                 <p class="text-xl mb-8">Crea, carica e gioca i tuoi quiz personalizzati!</p>
-                <div class="grid md:grid-cols-2 gap-6">
-                    <button onclick="switchView('quiz-creator-view'); playClickSound();" class="card-hover bg-white/20 p-8 rounded-lg text-2xl font-bold backdrop-blur-sm">
-                        🚀 Crea un Nuovo Quiz
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <button onclick="switchView('quiz-creator-view'); playClickSound();" class="card-hover bg-white/20 p-8 rounded-lg text-2xl font-bold backdrop-blur-sm flex flex-col justify-center items-center">
+                        🚀<span class="mt-2">Crea Quiz</span>
                     </button>
-                    <label for="quiz-file-input" class="card-hover bg-white/20 p-8 rounded-lg text-2xl font-bold cursor-pointer backdrop-blur-sm">
-                        📂 Carica un Quiz
+                    <label for="quiz-file-input" class="card-hover bg-white/20 p-8 rounded-lg text-2xl font-bold cursor-pointer backdrop-blur-sm flex flex-col justify-center items-center">
+                        📂<span class="mt-2">Carica da File</span>
                         <input type="file" id="quiz-file-input" class="hidden" accept=".json, .txt" onchange="loadQuizFromFile(event)">
                     </label>
+                    <button onclick="switchView('repository-view'); playClickSound();" class="card-hover bg-white/20 p-8 rounded-lg text-2xl font-bold backdrop-blur-sm flex flex-col justify-center items-center">
+                        🌐<span class="mt-2">Sfoglia Online</span>
+                    </button>
                 </div>
                 <div id="play-quiz-section" class="mt-8 hidden">
                      <h2 id="loaded-quiz-title" class="text-3xl font-bold mb-4"></h2>
@@ -99,16 +106,18 @@
                         </button>
                      </div>
                  </div>
-                 
-                <div id="repository-section" class="mt-12 w-full text-left">
-                    <h2 class="text-3xl font-bold mb-4 text-center">Quiz dal Repository</h2>
-                    <div class="mb-6">
-                        <input type="text" id="repo-filter-input" onkeyup="filterRepositoryQuizzes()" placeholder="Filtra per titolo o descrizione..." class="w-full max-w-lg mx-auto p-3 rounded-md bg-white/20 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-white/70 text-white">
+            </div>
+        </div>
+        
+        <div id="repository-view" class="view">
+            <div class="w-full max-w-4xl text-center">
+                <h2 class="text-4xl font-bold mb-6">Quiz dal Repository Online</h2>
+                <div class="mb-6">
+                    <input type="text" id="repo-filter-input" onkeyup="filterRepositoryQuizzes()" placeholder="Filtra per titolo o descrizione..." class="w-full max-w-lg mx-auto p-3 rounded-md bg-white/20 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-white/70 text-white">
+                </div>
+                <div id="repository-quizzes-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 text-left">
                     </div>
-                    <div id="repository-quizzes-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        </div>
-                </div>
-                </div>
+            </div>
         </div>
 
         <div id="quiz-creator-view" class="view bg-white/10 p-8 rounded-lg shadow-2xl backdrop-blur-md">
@@ -232,8 +241,8 @@
         let questionIdCounter = 0;
         let isMusicMuted = false;
         let isSfxMuted = false;
-        // NUOVA VARIABILE GLOBALE: Per memorizzare i quiz del repository
         let repositoryQuizzes = [];
+        let currentViewId = ''; // NUOVO: Traccia la vista corrente per la logica del tasto Home
         
         // Stato del Gioco per domanda
         let attemptsLeft = 0;
@@ -250,37 +259,16 @@
 
         // --- Inizializzazione Effetti Sonori Migliorati ---
         const sfxChannel = new Tone.Volume(-6).toDestination();
-        const correctSound = new Tone.PolySynth(Tone.FMSynth, {
-            harmonicity: 2.5,
-            modulationIndex: 15,
-            envelope: { attack: 0.01, decay: 0.2, release: 0.4 },
-            modulation: { type: "sine" },
-            modulationEnvelope: { attack: 0.01, decay: 0.5, release: 0.1 }
-        }).connect(sfxChannel);
-        
-        const incorrectSound = new Tone.MonoSynth({
-            oscillator: { type: 'sawtooth' }, envelope: { attack: 0.01, decay: 0.3, release: 0.2 }
-        }).connect(sfxChannel);
+        const correctSound = new Tone.PolySynth(Tone.FMSynth, { harmonicity: 2.5, modulationIndex: 15, envelope: { attack: 0.01, decay: 0.2, release: 0.4 }, modulation: { type: "sine" }, modulationEnvelope: { attack: 0.01, decay: 0.5, release: 0.1 } }).connect(sfxChannel);
+        const incorrectSound = new Tone.MonoSynth({ oscillator: { type: 'sawtooth' }, envelope: { attack: 0.01, decay: 0.3, release: 0.2 } }).connect(sfxChannel);
         const startQuizSound = new Tone.PolySynth(Tone.Synth).connect(sfxChannel);
         const winSound = new Tone.PolySynth(Tone.Synth).connect(sfxChannel);
         const loseSound = new Tone.PolySynth(Tone.Synth).connect(sfxChannel);
-        const buttonClickSound = new Tone.MembraneSynth({
-            pitchDecay: 0.01, octaves: 6, envelope: { attack: 0.001, decay: 0.2, sustain: 0.01, release: 0.2 }
-        }).connect(sfxChannel);
-        const timerTickSound = new Tone.MetalSynth({
-            frequency: 400, envelope: { attack: 0.001, decay: 0.1, release: 0.01 },
-            harmonicity: 3.1, modulationIndex: 16, resonance: 4000, octaves: 1.5
-        }).connect(sfxChannel);
-
-        const backgroundMusicSynth = new Tone.PolySynth(Tone.Synth, {
-            oscillator: { type: "triangle8" },
-            envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.4 }
-        }).toDestination();
+        const buttonClickSound = new Tone.MembraneSynth({ pitchDecay: 0.01, octaves: 6, envelope: { attack: 0.001, decay: 0.2, sustain: 0.01, release: 0.2 } }).connect(sfxChannel);
+        const timerTickSound = new Tone.MetalSynth({ frequency: 400, envelope: { attack: 0.001, decay: 0.1, release: 0.01 }, harmonicity: 3.1, modulationIndex: 16, resonance: 4000, octaves: 1.5 }).connect(sfxChannel);
+        const backgroundMusicSynth = new Tone.PolySynth(Tone.Synth, { oscillator: { type: "triangle8" }, envelope: { attack: 0.01, decay: 0.2, sustain: 0.1, release: 0.4 } }).toDestination();
         backgroundMusicSynth.volume.value = -12;
-
-        const musicPattern = new Tone.Sequence((time, note) => {
-            backgroundMusicSynth.triggerAttackRelease(note, "16n", time);
-        }, ["C4", "E4", "G4", "C5", "A4", "G4", "F4", "G4", "D4", "F4", "A4", "F4", "G4", "B4", "D5", "B4"], "8n");
+        const musicPattern = new Tone.Sequence((time, note) => { backgroundMusicSynth.triggerAttackRelease(note, "16n", time); }, ["C4", "E4", "G4", "C5", "A4", "G4", "F4", "G4", "D4", "F4", "A4", "F4", "G4", "B4", "D5", "B4"], "8n");
         musicPattern.loop = true;
         Tone.Transport.bpm.value = 140; 
         
@@ -291,40 +279,21 @@
             document.getElementById('audio-unlock-overlay').classList.remove('active');
             switchView('main-menu-view');
             playClickSound();
-            // NUOVA CHIAMATA: Carica il repository all'avvio
-            loadRepository();
         }
-        function playSound(sound, notes, duration, time) {
-            if (Tone.context.state !== 'running') return;
-            sound.triggerAttackRelease(notes, duration, time);
-        }
-        function playClickSound() {
-            playSound(buttonClickSound, "C2", "8n", Tone.now());
-        }
-        function toggleMusicMute() {
-            isMusicMuted = !isMusicMuted;
-            backgroundMusicSynth.volume.value = isMusicMuted ? -Infinity : -12;
-            document.getElementById('music-on-icon').classList.toggle('hidden');
-            document.getElementById('music-off-icon').classList.toggle('hidden');
-            playClickSound();
-        }
-        function toggleSfxMute() {
-            isSfxMuted = !isSfxMuted;
-            sfxChannel.mute = isSfxMuted;
-            document.getElementById('sfx-on-icon').classList.toggle('hidden');
-            document.getElementById('sfx-off-icon').classList.toggle('hidden');
-            playClickSound();
-        }
+        function playSound(sound, notes, duration, time) { if (Tone.context.state !== 'running') return; sound.triggerAttackRelease(notes, duration, time); }
+        function playClickSound() { playSound(buttonClickSound, "C2", "8n", Tone.now()); }
+        function toggleMusicMute() { isMusicMuted = !isMusicMuted; backgroundMusicSynth.volume.value = isMusicMuted ? -Infinity : -12; document.getElementById('music-on-icon').classList.toggle('hidden'); document.getElementById('music-off-icon').classList.toggle('hidden'); playClickSound(); }
+        function toggleSfxMute() { isSfxMuted = !isSfxMuted; sfxChannel.mute = isSfxMuted; document.getElementById('sfx-on-icon').classList.toggle('hidden'); document.getElementById('sfx-off-icon').classList.toggle('hidden'); playClickSound(); }
 
         // --- NUOVE FUNZIONI: Gestione Repository Quiz ---
         
         /**
-         * Carica il file config.json e visualizza i quiz disponibili.
+         * Carica il file config.json forzando l'aggiornamento e visualizza i quiz.
          */
         async function loadRepository() {
             try {
-                // Sostituisci 'config.json' con l'URL completo se si trova su un altro server.
-                const response = await fetch('config.json');
+                const cacheBust = 'v=' + new Date().getTime(); // Forzatura aggiornamento cache
+                const response = await fetch(`config.json?${cacheBust}`);
                 if (!response.ok) throw new Error('La risposta della rete non era valida.');
                 repositoryQuizzes = await response.json();
                 displayRepositoryQuizzes(repositoryQuizzes);
@@ -336,17 +305,11 @@
 
         /**
          * Mostra le card dei quiz nell'interfaccia utente.
-         * @param {Array} quizzes L'array di quiz da visualizzare.
          */
         function displayRepositoryQuizzes(quizzes) {
             const container = document.getElementById('repository-quizzes-container');
-            container.innerHTML = ''; // Pulisce il contenuto precedente
-
-            if (quizzes.length === 0) {
-                container.innerHTML = `<p class="text-center col-span-full">Nessun quiz trovato.</p>`;
-                return;
-            }
-
+            container.innerHTML = '';
+            if (quizzes.length === 0) { container.innerHTML = `<p class="text-center col-span-full">Nessun quiz trovato.</p>`; return; }
             quizzes.forEach(quiz => {
                 const quizCard = document.createElement('div');
                 quizCard.className = 'card-hover bg-white/20 p-6 rounded-lg text-left flex flex-col justify-between';
@@ -357,8 +320,7 @@
                     </div>
                     <button onclick="loadQuizFromRepo('${quiz.id}')" class="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg w-full">
                         Carica Quiz
-                    </button>
-                `;
+                    </button>`;
                 container.appendChild(quizCard);
             });
         }
@@ -368,65 +330,78 @@
          */
         function filterRepositoryQuizzes() {
             const filterText = document.getElementById('repo-filter-input').value.toLowerCase();
-            const filteredQuizzes = repositoryQuizzes.filter(quiz =>
-                quiz.title.toLowerCase().includes(filterText) ||
-                quiz.description.toLowerCase().includes(filterText)
-            );
+            const filteredQuizzes = repositoryQuizzes.filter(q => q.title.toLowerCase().includes(filterText) || q.description.toLowerCase().includes(filterText));
             displayRepositoryQuizzes(filteredQuizzes);
         }
 
         /**
-         * Carica un singolo file quiz JSON dal repository tramite il suo ID.
-         * @param {string} quizId L'ID del quiz da caricare.
+         * Carica un quiz dal repo e torna al menu principale per giocarci.
          */
         async function loadQuizFromRepo(quizId) {
             playClickSound();
             const quizInfo = repositoryQuizzes.find(q => q.id === quizId);
-            if (!quizInfo) {
-                alert("Quiz non trovato nel repository.");
-                return;
-            }
-
+            if (!quizInfo) { alert("Quiz non trovato nel repository."); return; }
             try {
                 const response = await fetch(quizInfo.path);
                 if (!response.ok) throw new Error(`Impossibile caricare il quiz da ${quizInfo.path}`);
-                
                 const quizData = await response.json();
-
                 if (!quizData.title || !quizData.questions) throw new Error("Formato del file quiz non valido.");
                 currentQuiz = quizData;
-                
-                let titleHtml = `Quiz Caricato: "${currentQuiz.title}"`;
-                if (currentQuiz.subtitle) {
-                    titleHtml += `<br><span class="text-xl font-normal text-white/80">${currentQuiz.subtitle}</span>`;
-                }
-                document.getElementById('loaded-quiz-title').innerHTML = titleHtml;
-                document.getElementById('play-quiz-section').classList.remove('hidden');
-
-                // Fa scorrere la vista fino alla sezione di gioco
+                switchView('main-menu-view'); // Torna al menu principale
                 document.getElementById('play-quiz-section').scrollIntoView({ behavior: 'smooth' });
-
             } catch (error) {
                 alert("Errore nel caricamento del quiz dal repository: " + error.message);
                 console.error("Errore Fetch:", error);
-                document.getElementById('play-quiz-section').classList.add('hidden');
             }
         }
 
         // --- Funzioni UI ---
+        
+        /**
+         * NUOVO: Funzione per tornare al menu principale con conferma.
+         */
+        function goToHome() {
+            playClickSound();
+            if (currentViewId === 'quiz-player-view') {
+                if (confirm('Sei sicuro di voler tornare al menu? I progressi del quiz in corso verranno persi.')) {
+                    switchView('main-menu-view');
+                }
+            } else {
+                switchView('main-menu-view');
+            }
+        }
+        
+        /**
+         * MODIFICATO: Gestisce il cambio di vista e la visibilità del tasto Home.
+         */
         function switchView(viewId) {
+            currentViewId = viewId;
             document.querySelectorAll('.view').forEach(view => {
                 if (view.id !== 'audio-unlock-overlay') view.classList.remove('active');
             });
             document.getElementById(viewId).classList.add('active');
+
+            const homeBtn = document.getElementById('home-btn');
+            if (viewId === 'main-menu-view' || viewId === 'audio-unlock-overlay') {
+                homeBtn.classList.add('hidden');
+            } else {
+                homeBtn.classList.remove('hidden');
+            }
+            
             if (viewId === 'main-menu-view') {
-                document.getElementById('play-quiz-section').classList.add('hidden');
-                document.getElementById('quiz-file-input').value = '';
-                currentQuiz = null;
                 musicPattern.stop();
                 if (Tone.Transport.state === 'started') Tone.Transport.stop();
+
+                if (currentQuiz) {
+                    let titleHtml = `Quiz Caricato: "${currentQuiz.title}"`;
+                    if (currentQuiz.subtitle) { titleHtml += `<br><span class="text-xl font-normal text-white/80">${currentQuiz.subtitle}</span>`; }
+                    document.getElementById('loaded-quiz-title').innerHTML = titleHtml;
+                    document.getElementById('play-quiz-section').classList.remove('hidden');
+                } else {
+                    document.getElementById('play-quiz-section').classList.add('hidden');
+                    document.getElementById('quiz-file-input').value = '';
+                }
             } else if (viewId === 'quiz-creator-view') {
-                // Clear fields only for a new quiz, not for an edit
                 if (!currentQuiz) {
                     document.getElementById('quiz-title-input').value = '';
                     document.getElementById('quiz-subtitle-input').value = '';
@@ -437,6 +412,8 @@
                     questionIdCounter = 0;
                     addQuestion();
                 }
+            } else if (viewId === 'repository-view') {
+                loadRepository(); // Carica i quiz quando si apre la pagina dedicata
             }
         }
 
@@ -444,542 +421,44 @@
             const title = currentQuiz.title;
             const subtitle = currentQuiz.subtitle || '';
             const headerHTML = `<h1 class="text-2xl font-bold">${title}</h1><p class="text-md text-white/80">${subtitle}</p>`;
-            
             document.getElementById('quiz-header-player').innerHTML = headerHTML;
             document.getElementById('quiz-header-intermission').innerHTML = headerHTML;
             document.getElementById('quiz-header-gameover').innerHTML = headerHTML;
         }
 
-        // --- Logica Creazione Quiz ---
-        function getAnswerEditorHTML(questionId, type) {
-             if (type === 'true-false') {
-                return `
-                    <div class="flex items-center col-span-1 md:col-span-2">
-                        <input type="radio" name="correct-answer-${questionId}" value="0" class="w-5 h-5 mr-3 accent-yellow-400" required>
-                        <label>Vero</label>
-                    </div>
-                    <div class="flex items-center col-span-1 md:col-span-2">
-                        <input type="radio" name="correct-answer-${questionId}" value="1" class="w-5 h-5 mr-3 accent-yellow-400" required>
-                        <label>Falso</label>
-                    </div>
-                `;
-            }
-            return [0,1,2,3].map(i => `
-                <div class="flex items-center">
-                    <input type="radio" name="correct-answer-${questionId}" value="${i}" class="w-5 h-5 mr-3 accent-yellow-400" required>
-                    <input type="text" placeholder="Risposta ${i + 1}" class="w-full p-2 rounded-md bg-white/20 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400" data-answer-text>
-                </div>
-            `).join('');
-        }
-        function updateQuestionEditor(questionId, type) {
-            const container = document.getElementById(`answers-editor-${questionId}`);
-            container.innerHTML = getAnswerEditorHTML(questionId, type);
-        }
+        // --- Logica Creazione Quiz (invariata) ---
+        function getAnswerEditorHTML(questionId, type) { if (type === 'true-false') { return ` <div class="flex items-center col-span-1 md:col-span-2"> <input type="radio" name="correct-answer-${questionId}" value="0" class="w-5 h-5 mr-3 accent-yellow-400" required> <label>Vero</label> </div> <div class="flex items-center col-span-1 md:col-span-2"> <input type="radio" name="correct-answer-${questionId}" value="1" class="w-5 h-5 mr-3 accent-yellow-400" required> <label>Falso</label> </div> `; } return [0,1,2,3].map(i => ` <div class="flex items-center"> <input type="radio" name="correct-answer-${questionId}" value="${i}" class="w-5 h-5 mr-3 accent-yellow-400" required> <input type="text" placeholder="Risposta ${i + 1}" class="w-full p-2 rounded-md bg-white/20 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400" data-answer-text> </div> `).join(''); }
+        function updateQuestionEditor(questionId, type) { const container = document.getElementById(`answers-editor-${questionId}`); container.innerHTML = getAnswerEditorHTML(questionId, type); }
+        function addQuestion(questionData = null) { const questionId = questionIdCounter++; const questionsContainer = document.getElementById('questions-container'); const questionCard = document.createElement('div'); questionCard.className = 'bg-white/10 p-6 rounded-lg mt-4 border border-white/20'; questionCard.id = `question-card-${questionId}`; questionCard.innerHTML = ` <div class="flex justify-between items-center mb-4"> <div class="flex items-center"> <h3 class="text-xl font-semibold mr-4" data-question-number>Domanda ${questionId + 1}</h3> <div class="flex flex-col gap-1 ml-4"> <button onclick="moveQuestion(${questionId}, 'up')" class="text-xs p-1 leading-none">▲</button> <button onclick="moveQuestion(${questionId}, 'down')" class="text-xs p-1 leading-none">▼</button> </div> </div> <div> <select onchange="updateQuestionEditor(${questionId}, this.value)" data-question-type class="bg-white/20 p-2 rounded-md border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400"> <option value="multiple-choice">Risposta Multipla</option> <option value="true-false">Vero o Falso</option> </select> <button onclick="removeQuestion(${questionId}); playClickSound();" class="text-red-400 hover:text-red-600 font-bold ml-4">Rimuovi</button> </div> </div> <textarea placeholder="Testo della domanda..." class="w-full p-2 rounded-md bg-white/20 border border-white/30 mb-4 h-24 resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400" data-question-text></textarea> <div id="answers-editor-${questionId}" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div> `; questionsContainer.appendChild(questionCard); if (questionData) { questionCard.querySelector('[data-question-text]').value = questionData.question; const typeSelect = questionCard.querySelector('[data-question-type]'); typeSelect.value = questionData.type; updateQuestionEditor(questionId, questionData.type); if (questionData.type === 'multiple-choice') { const answerInputs = questionCard.querySelectorAll('[data-answer-text]'); answerInputs.forEach((input, i) => { input.value = questionData.answers[i] || ''; }); } const correctRadio = questionCard.querySelector(`input[value="${questionData.correctAnswer}"]`); if(correctRadio) correctRadio.checked = true; } else { updateQuestionEditor(questionId, 'multiple-choice'); } }
+        function updateQuestionNumbers() { const questionCards = document.querySelectorAll('#questions-container > div'); questionCards.forEach((card, index) => { card.querySelector('[data-question-number]').textContent = `Domanda ${index + 1}`; }); }
+        function moveQuestion(questionId, direction) { const questionCard = document.getElementById(`question-card-${questionId}`); const container = questionCard.parentElement; if (direction === 'up' && questionCard.previousElementSibling) { container.insertBefore(questionCard, questionCard.previousElementSibling); } else if (direction === 'down' && questionCard.nextElementSibling) { container.insertBefore(questionCard.nextElementSibling, questionCard); } updateQuestionNumbers(); }
+        function removeQuestion(questionId) { document.getElementById(`question-card-${questionId}`).remove(); updateQuestionNumbers(); }
+        function getQuizDataFromEditor() { const title = document.getElementById('quiz-title-input').value.trim(); const subtitle = document.getElementById('quiz-subtitle-input').value.trim(); const imageBase64 = document.getElementById('quiz-image-base64').value; if (!title) { alert("Per favore, inserisci un titolo per il quiz."); return null; } const questions = []; const questionCards = document.querySelectorAll('#questions-container > div'); for (const card of questionCards) { const questionText = card.querySelector('[data-question-text]').value.trim(); const questionType = card.querySelector('[data-question-type]').value; const correctAnswerInput = card.querySelector('input[type="radio"]:checked'); if (!questionText || !correctAnswerInput) { alert("Per favore, compila il testo e seleziona la risposta corretta per ogni domanda."); return null; } let questionData = { question: questionText, type: questionType, correctAnswer: parseInt(correctAnswerInput.value), answers: [] }; if (questionType === 'multiple-choice') { const answerInputs = Array.from(card.querySelectorAll('[data-answer-text]')); questionData.answers = answerInputs.map(input => input.value.trim()); if (questionData.answers.some(a => !a)) { alert("Per favore, compila tutti i campi delle risposte multiple."); return null; } } else { questionData.answers = ["Vero", "Falso"]; } questions.push(questionData); } if (questions.length === 0) { alert("Il quiz deve avere almeno una domanda."); return null; } return { title, subtitle, image: imageBase64 || null, questions }; }
+        function saveQuiz() { const quizData = getQuizDataFromEditor(); if (!quizData) return; const blob = new Blob([JSON.stringify(quizData, null, 2)], { type: 'application/json' }); const url = URL.createObjectURL(blob); const a = document.createElement('a'); const safeTitle = quizData.title.replace(/[^a-z0-9_.-]/gi, '_').toLowerCase(); a.href = url; a.download = `${safeTitle || 'quiz'}.json`; document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url); currentQuiz = null; switchView('main-menu-view'); }
+        function playEditedQuiz() { playClickSound(); const quizData = getQuizDataFromEditor(); if (!quizData) return; currentQuiz = quizData; startQuiz(); }
         
-        function addQuestion(questionData = null) {
-            const questionId = questionIdCounter++;
-            const questionsContainer = document.getElementById('questions-container');
-            const questionCard = document.createElement('div');
-            questionCard.className = 'bg-white/10 p-6 rounded-lg mt-4 border border-white/20';
-            questionCard.id = `question-card-${questionId}`;
-            questionCard.innerHTML = `
-                <div class="flex justify-between items-center mb-4">
-                    <div class="flex items-center">
-                        <h3 class="text-xl font-semibold mr-4" data-question-number>Domanda ${questionId + 1}</h3>
-                        <div class="flex flex-col gap-1 ml-4">
-                            <button onclick="moveQuestion(${questionId}, 'up')" class="text-xs p-1 leading-none">▲</button>
-                            <button onclick="moveQuestion(${questionId}, 'down')" class="text-xs p-1 leading-none">▼</button>
-                        </div>
-                    </div>
-                    <div>
-                        <select onchange="updateQuestionEditor(${questionId}, this.value)" data-question-type class="bg-white/20 p-2 rounded-md border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400">
-                            <option value="multiple-choice">Risposta Multipla</option>
-                            <option value="true-false">Vero o Falso</option>
-                        </select>
-                        <button onclick="removeQuestion(${questionId}); playClickSound();" class="text-red-400 hover:text-red-600 font-bold ml-4">Rimuovi</button>
-                    </div>
-                </div>
-                <textarea placeholder="Testo della domanda..." class="w-full p-2 rounded-md bg-white/20 border border-white/30 mb-4 h-24 resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400" data-question-text></textarea>
-                <div id="answers-editor-${questionId}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    </div>
-            `;
-            questionsContainer.appendChild(questionCard);
-
-            if (questionData) {
-                questionCard.querySelector('[data-question-text]').value = questionData.question;
-                const typeSelect = questionCard.querySelector('[data-question-type]');
-                typeSelect.value = questionData.type;
-                updateQuestionEditor(questionId, questionData.type);
-
-                if (questionData.type === 'multiple-choice') {
-                    const answerInputs = questionCard.querySelectorAll('[data-answer-text]');
-                    answerInputs.forEach((input, i) => {
-                        input.value = questionData.answers[i] || '';
-                    });
-                }
-                const correctRadio = questionCard.querySelector(`input[value="${questionData.correctAnswer}"]`);
-                if(correctRadio) correctRadio.checked = true;
-
-            } else {
-                updateQuestionEditor(questionId, 'multiple-choice');
-            }
-        }
-
-        function updateQuestionNumbers() {
-            const questionCards = document.querySelectorAll('#questions-container > div');
-            questionCards.forEach((card, index) => {
-                card.querySelector('[data-question-number]').textContent = `Domanda ${index + 1}`;
-            });
-        }
-
-        function moveQuestion(questionId, direction) {
-            const questionCard = document.getElementById(`question-card-${questionId}`);
-            const container = questionCard.parentElement;
-
-            if (direction === 'up' && questionCard.previousElementSibling) {
-                container.insertBefore(questionCard, questionCard.previousElementSibling);
-            } else if (direction === 'down' && questionCard.nextElementSibling) {
-                container.insertBefore(questionCard.nextElementSibling, questionCard);
-            }
-            updateQuestionNumbers();
-        }
-
-        function removeQuestion(questionId) {
-            document.getElementById(`question-card-${questionId}`).remove();
-            updateQuestionNumbers();
-        }
-
-        function getQuizDataFromEditor() {
-            const title = document.getElementById('quiz-title-input').value.trim();
-            const subtitle = document.getElementById('quiz-subtitle-input').value.trim();
-            const imageBase64 = document.getElementById('quiz-image-base64').value;
-            if (!title) {
-                alert("Per favore, inserisci un titolo per il quiz.");
-                return null;
-            }
-
-            const questions = [];
-            const questionCards = document.querySelectorAll('#questions-container > div');
-            for (const card of questionCards) {
-                const questionText = card.querySelector('[data-question-text]').value.trim();
-                const questionType = card.querySelector('[data-question-type]').value;
-                const correctAnswerInput = card.querySelector('input[type="radio"]:checked');
-
-                if (!questionText || !correctAnswerInput) {
-                    alert("Per favore, compila il testo e seleziona la risposta corretta per ogni domanda.");
-                    return null;
-                }
-                let questionData = {
-                    question: questionText, type: questionType,
-                    correctAnswer: parseInt(correctAnswerInput.value), answers: []
-                };
-                if (questionType === 'multiple-choice') {
-                    const answerInputs = Array.from(card.querySelectorAll('[data-answer-text]'));
-                    questionData.answers = answerInputs.map(input => input.value.trim());
-                    if (questionData.answers.some(a => !a)) {
-                        alert("Per favore, compila tutti i campi delle risposte multiple.");
-                        return null;
-                    }
-                } else { questionData.answers = ["Vero", "Falso"]; }
-                questions.push(questionData);
-            }
-            if (questions.length === 0) {
-                alert("Il quiz deve avere almeno una domanda.");
-                return null;
-            }
-            
-            return { title, subtitle, image: imageBase64 || null, questions };
-        }
-
-        function saveQuiz() {
-            const quizData = getQuizDataFromEditor();
-            if (!quizData) return;
-
-            const blob = new Blob([JSON.stringify(quizData, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            
-            const safeTitle = quizData.title.replace(/[^a-z0-9_.-]/gi, '_').toLowerCase();
-            a.href = url; 
-            a.download = `${safeTitle || 'quiz'}.json`;
-
-            document.body.appendChild(a); a.click(); document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-            currentQuiz = null; 
-            switchView('main-menu-view');
-        }
-
-        function playEditedQuiz() {
-            playClickSound();
-            const quizData = getQuizDataFromEditor();
-            if (!quizData) return;
-
-            currentQuiz = quizData;
-            startQuiz();
-        }
-
-        // --- Logica Gestione Immagini ---
-        function handleImageUpload(event, target) {
-            const file = event.target.files[0]; if (!file) return;
-            const reader = new FileReader();
-            reader.onload = e => {
-                const base64 = e.target.result;
-                if(target === 'quiz'){
-                    document.getElementById('quiz-image-base64').value = base64;
-                    const preview = document.getElementById('quiz-preview-image');
-                    preview.src = base64;
-                    preview.classList.remove('hidden');
-                }
-            };
-            reader.readAsDataURL(file);
-        }
-        async function handleImageUrl(event, target) {
-            event.preventDefault();
-            const urlInput = document.getElementById(`image-url-${target}`);
-            const url = urlInput.value.trim(); if (!url) return;
-            const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`;
-            try {
-                const response = await fetch(proxyUrl);
-                if (!response.ok) throw new Error('Network response was not ok.');
-                const blob = await response.blob();
-                const reader = new FileReader();
-                reader.onload = e => {
-                    const base64 = e.target.result;
-                     if(target === 'quiz'){
-                        document.getElementById('quiz-image-base64').value = base64;
-                        const preview = document.getElementById('quiz-preview-image');
-                        preview.src = base64;
-                        preview.classList.remove('hidden');
-                        urlInput.value = '';
-                    }
-                };
-                reader.readAsDataURL(blob);
-            } catch (error) {
-                console.error("Error fetching image from URL:", error);
-                alert("Impossibile caricare l'immagine dall'URL. Prova a scaricarla e caricarla come file.");
-            }
-        }
+        // --- Logica Gestione Immagini (invariata) ---
+        function handleImageUpload(event, target) { const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = e => { const base64 = e.target.result; if(target === 'quiz'){ document.getElementById('quiz-image-base64').value = base64; const preview = document.getElementById('quiz-preview-image'); preview.src = base64; preview.classList.remove('hidden'); } }; reader.readAsDataURL(file); }
+        async function handleImageUrl(event, target) { event.preventDefault(); const urlInput = document.getElementById(`image-url-${target}`); const url = urlInput.value.trim(); if (!url) return; const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`; try { const response = await fetch(proxyUrl); if (!response.ok) throw new Error('Network response was not ok.'); const blob = await response.blob(); const reader = new FileReader(); reader.onload = e => { const base64 = e.target.result; if(target === 'quiz'){ document.getElementById('quiz-image-base64').value = base64; const preview = document.getElementById('quiz-preview-image'); preview.src = base64; preview.classList.remove('hidden'); urlInput.value = ''; } }; reader.readAsDataURL(blob); } catch (error) { console.error("Error fetching image from URL:", error); alert("Impossibile caricare l'immagine dall'URL. Prova a scaricarla e caricarla come file."); } }
         
-        // --- Logica Caricamento e Modifica Quiz ---
-        function loadQuizFromFile(event) {
-            playClickSound();
-            const file = event.target.files[0]; if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const quizData = JSON.parse(e.target.result);
-                    if (!quizData.title || !quizData.questions) throw new Error("Formato del file non valido.");
-                    currentQuiz = quizData;
-                    let titleHtml = `Quiz Caricato: "${currentQuiz.title}"`;
-                    if (currentQuiz.subtitle) {
-                        titleHtml += `<br><span class="text-xl font-normal text-white/80">${currentQuiz.subtitle}</span>`;
-                    }
-                    document.getElementById('loaded-quiz-title').innerHTML = titleHtml;
-                    document.getElementById('play-quiz-section').classList.remove('hidden');
-                } catch (error) {
-                    alert("Errore nel caricamento: " + error.message);
-                    document.getElementById('play-quiz-section').classList.add('hidden');
-                }
-            };
-            reader.readAsText(file);
-        }
+        // --- Logica Caricamento e Modifica Quiz (invariata) ---
+        function loadQuizFromFile(event) { playClickSound(); const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const quizData = JSON.parse(e.target.result); if (!quizData.title || !quizData.questions) throw new Error("Formato del file non valido."); currentQuiz = quizData; let titleHtml = `Quiz Caricato: "${currentQuiz.title}"`; if (currentQuiz.subtitle) { titleHtml += `<br><span class="text-xl font-normal text-white/80">${currentQuiz.subtitle}</span>`; } document.getElementById('loaded-quiz-title').innerHTML = titleHtml; document.getElementById('play-quiz-section').classList.remove('hidden'); } catch (error) { alert("Errore nel caricamento: " + error.message); document.getElementById('play-quiz-section').classList.add('hidden'); } }; reader.readAsText(file); }
+        function loadQuizFromFileAndEdit(event) { playClickSound(); const file = event.target.files[0]; if (!file) return; const reader = new FileReader(); reader.onload = function(e) { try { const quizData = JSON.parse(e.target.result); if (!quizData.title || !quizData.questions) throw new Error("Formato del file non valido."); currentQuiz = quizData; loadQuizForEditing(); } catch (error) { alert("Errore nel caricamento: " + error.message); } finally { event.target.value = ''; } }; reader.readAsText(file); }
+        function loadQuizForEditing() { if (!currentQuiz) return; switchView('quiz-creator-view'); document.getElementById('quiz-title-input').value = currentQuiz.title; document.getElementById('quiz-subtitle-input').value = currentQuiz.subtitle || ''; const imageBase64 = currentQuiz.image || ''; document.getElementById('quiz-image-base64').value = imageBase64; if (imageBase64) { const preview = document.getElementById('quiz-preview-image'); preview.src = imageBase64; preview.classList.remove('hidden'); } const questionsContainer = document.getElementById('questions-container'); questionsContainer.innerHTML = ''; questionIdCounter = 0; currentQuiz.questions.forEach(q => addQuestion(q)); }
 
-        function loadQuizFromFileAndEdit(event) {
-            playClickSound();
-            const file = event.target.files[0]; if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                try {
-                    const quizData = JSON.parse(e.target.result);
-                    if (!quizData.title || !quizData.questions) throw new Error("Formato del file non valido.");
-                    currentQuiz = quizData;
-                    // Directly load the data into the editor
-                    loadQuizForEditing();
-                } catch (error) {
-                    alert("Errore nel caricamento: " + error.message);
-                } finally {
-                    // Reset the file input so the same file can be loaded again
-                    event.target.value = '';
-                }
-            };
-            reader.readAsText(file);
-        }
-        
-        function loadQuizForEditing() {
-            if (!currentQuiz) return;
-            switchView('quiz-creator-view');
-            
-            document.getElementById('quiz-title-input').value = currentQuiz.title;
-            document.getElementById('quiz-subtitle-input').value = currentQuiz.subtitle || '';
-            const imageBase64 = currentQuiz.image || '';
-            document.getElementById('quiz-image-base64').value = imageBase64;
-            if (imageBase64) {
-                 const preview = document.getElementById('quiz-preview-image');
-                 preview.src = imageBase64;
-                 preview.classList.remove('hidden');
-            }
-            
-            const questionsContainer = document.getElementById('questions-container');
-            questionsContainer.innerHTML = '';
-            questionIdCounter = 0;
-            currentQuiz.questions.forEach(q => addQuestion(q));
-        }
-
-        // --- Logica di Gioco e Navigazione---
-        function startQuiz() {
-            const now = Tone.now();
-            playSound(startQuizSound, "C4", "8n", now);
-            playSound(startQuizSound, "E4", "8n", now + 0.1);
-            playSound(startQuizSound, "G4", "8n", now + 0.2);
-            playSound(startQuizSound, "C5", "8n", now + 0.3);
-            if (!currentQuiz) { alert("Nessun quiz caricato!"); return; }
-
-            currentQuiz.questions.forEach(q => {
-                q.isAnswered = false;
-                q.userScore = 0;
-            });
-
-            if (Tone.Transport.state !== 'started') Tone.Transport.start();
-            musicPattern.start(0);
-            score = 0; 
-            currentQuestionIndex = 0;
-            displayQuestion();
-        }
-
-        function nextQuestion() {
-            if (currentQuestionIndex < currentQuiz.questions.length - 1) {
-                currentQuestionIndex++;
-                displayQuestion();
-            } else {
-                endGame();
-            }
-        }
-
-        function previousQuestion() {
-            if (currentQuestionIndex > 0) {
-                currentQuestionIndex--;
-                displayQuestion();
-            }
-        }
-
-        function resetCurrentQuestion() {
-            playClickSound();
-            const questionState = currentQuiz.questions[currentQuestionIndex];
-            score -= questionState.userScore;
-            questionState.isAnswered = false;
-            questionState.userScore = 0;
-            displayQuestion();
-        }
-
-        function updateNavButtons() {
-            const prevBtn = document.getElementById('prev-question-btn');
-            const nextBtn = document.getElementById('next-question-btn');
-            
-            prevBtn.disabled = currentQuestionIndex === 0;
-            nextBtn.disabled = false;
-
-            if (currentQuestionIndex === currentQuiz.questions.length - 1) {
-                nextBtn.textContent = 'Fine Quiz';
-            } else {
-                nextBtn.textContent = 'Prossima >';
-            }
-        }
-
-        function displayQuestion() {
-            if (currentQuestionIndex >= currentQuiz.questions.length) { endGame(); return; }
-            
-            switchView('quiz-player-view');
-            updateQuizHeaders();
-            updateNavButtons();
-
-            const questionState = currentQuiz.questions[currentQuestionIndex];
-            
-            document.getElementById('question-counter').textContent = `Domanda ${currentQuestionIndex + 1} / ${currentQuiz.questions.length}`;
-            document.getElementById('score-display').textContent = `Punteggio: ${score}`;
-            document.getElementById('question-text').textContent = questionState.question;
-            
-            const imageContainer = document.getElementById('question-image-container');
-            const imageEl = document.getElementById('question-image');
-            if (currentQuiz.image) {
-                imageEl.src = currentQuiz.image;
-                imageContainer.classList.remove('hidden');
-            } else {
-                imageContainer.classList.add('hidden');
-                imageEl.src = '';
-            }
-
-            const answersGrid = document.getElementById('answers-grid');
-            const answeredInfo = document.getElementById('answered-state-info');
-            answersGrid.innerHTML = '';
-
-            if (questionState.isAnswered) {
-                answeredInfo.classList.remove('hidden');
-                answersGrid.classList.remove('hidden');
-
-                document.getElementById('timer-toggle-btn').disabled = true;
-                if(timerInterval) clearInterval(timerInterval);
-                document.getElementById('timer-display').textContent = TIME_PER_QUESTION;
-
-                if(questionState.type === 'true-false') {
-                     answersGrid.innerHTML = `
-                        <button class="p-4 rounded-lg text-xl font-semibold text-white card-hover answer-btn-blue opacity-50" disabled>Vero</button>
-                        <button class="p-4 rounded-lg text-xl font-semibold text-white card-hover answer-btn-red opacity-50" disabled>Falso</button>
-                     `;
-                } else {
-                    const colors = ['answer-btn-red', 'answer-btn-blue', 'answer-btn-yellow', 'answer-btn-green'];
-                    questionState.answers.forEach((answer, index) => {
-                        const button = document.createElement('button');
-                        button.textContent = answer;
-                        button.className = `p-4 rounded-lg text-xl font-semibold text-white card-hover ${colors[index]} opacity-50`;
-                        button.disabled = true;
-                        answersGrid.appendChild(button);
-                    });
-                }
-            } else {
-                answeredInfo.classList.add('hidden');
-                answersGrid.classList.remove('hidden');
-                
-                attemptsLeft = questionState.answers.length;
-                firstAttemptOnQuestion = true;
-                setupTimer();
-                
-                if(questionState.type === 'true-false') {
-                     answersGrid.innerHTML = `
-                        <button class="p-4 rounded-lg text-xl font-semibold text-white card-hover answer-btn-blue" onclick="handleAnswer(0, this)">Vero</button>
-                        <button class="p-4 rounded-lg text-xl font-semibold text-white card-hover answer-btn-red" onclick="handleAnswer(1, this)">Falso</button>
-                     `;
-                } else {
-                    const shuffledColors = [...answerColors].sort(() => Math.random() - 0.5);
-                    questionState.answers.forEach((answer, index) => {
-                        const button = document.createElement('button');
-                        button.textContent = answer;
-                        button.className = `p-4 rounded-lg text-xl font-semibold text-white card-hover ${shuffledColors[index]}`;
-                        button.onclick = (event) => handleAnswer(index, event.target);
-                        answersGrid.appendChild(button);
-                    });
-                }
-            }
-        }
-        
-        // --- Logica Timer ---
-        function setupTimer() {
-            if (timerInterval) clearInterval(timerInterval);
-            isTimerPaused = true; timeLeft = TIME_PER_QUESTION;
-            const timerDisplay = document.getElementById('timer-display');
-            const toggleBtn = document.getElementById('timer-toggle-btn');
-            timerDisplay.textContent = timeLeft;
-            toggleBtn.textContent = 'Avvia';
-            toggleBtn.disabled = false;
-            toggleBtn.classList.remove('bg-yellow-500', 'hover:bg-yellow-600');
-            toggleBtn.classList.add('bg-green-500', 'hover:bg-green-600');
-        }
-        function toggleTimer() {
-            isTimerPaused = !isTimerPaused;
-            const toggleBtn = document.getElementById('timer-toggle-btn');
-            if (isTimerPaused) {
-                clearInterval(timerInterval);
-                toggleBtn.textContent = 'Avvia';
-                toggleBtn.classList.remove('bg-yellow-500', 'hover:bg-yellow-600');
-                toggleBtn.classList.add('bg-green-500', 'hover:bg-green-600');
-            } else {
-                toggleBtn.textContent = 'Pausa';
-                toggleBtn.classList.remove('bg-green-500', 'hover:bg-green-600');
-                toggleBtn.classList.add('bg-yellow-500', 'hover:bg-yellow-600');
-                timerInterval = setInterval(() => {
-                    timeLeft--;
-                    document.getElementById('timer-display').textContent = timeLeft;
-                    if (timeLeft <= 5 && timeLeft > 0) playSound(timerTickSound, "C5", "16n", Tone.now());
-                    if (timeLeft <= 0) { clearInterval(timerInterval); handleTimeout(); }
-                }, 1000);
-            }
-        }
-        function handleTimeout() {
-            playSound(incorrectSound, "G2", "4n", Tone.now());
-            document.querySelectorAll('#answers-grid button').forEach(btn => btn.disabled = true);
-            const questionState = currentQuiz.questions[currentQuestionIndex];
-            questionState.isAnswered = true;
-            questionState.userScore = 0;
-            showIntermission(null, 0);
-        }
-
-        function handleAnswer(selectedIndex, selectedButton) {
-            if (firstAttemptOnQuestion) {
-                clearInterval(timerInterval);
-                isTimerPaused = true; firstAttemptOnQuestion = false;
-                document.getElementById('timer-toggle-btn').disabled = true;
-            }
-            const questionData = currentQuiz.questions[currentQuestionIndex];
-            const isCorrect = selectedIndex === questionData.correctAnswer;
-            if (isCorrect) {
-                let pointsWon = 0;
-                if (attemptsLeft >= 4) pointsWon = 500 + Math.round(500 * (timeLeft / TIME_PER_QUESTION));
-                else if (attemptsLeft === 3) pointsWon = 250 + Math.round(250 * (timeLeft / TIME_PER_QUESTION));
-                else if (attemptsLeft === 2) pointsWon = 100 + Math.round(100 * (timeLeft / TIME_PER_QUESTION));
-                
-                score += pointsWon;
-                questionData.isAnswered = true;
-                questionData.userScore = pointsWon;
-
-                document.querySelectorAll('#answers-grid button').forEach(btn => btn.disabled = true);
-                selectedButton.classList.add('border-4', 'border-yellow-300', 'animate-pulse');
-                const now = Tone.now();
-                playSound(correctSound, "C5", "16n", now);
-                playSound(correctSound, "E5", "16n", now + 0.1);
-                playSound(correctSound, "G5", "16n", now + 0.2);
-                playSound(correctSound, "C6", "16n", now + 0.3);
-                setTimeout(() => { showIntermission(true, pointsWon); }, 1500);
-            } else {
-                selectedButton.disabled = true;
-                selectedButton.classList.add('opacity-50', 'pointer-events-none');
-                playSound(incorrectSound, "C3", "4n", Tone.now());
-                attemptsLeft--;
-            }
-        }
-        
-        function showIntermission(isCorrect, pointsWon) {
-            switchView('intermission-view');
-            updateQuizHeaders();
-            const resultFeedback = document.getElementById('result-feedback');
-            const pointsFeedback = document.getElementById('points-feedback');
-            if (isCorrect === true) {
-                 resultFeedback.textContent = "Corretto!";
-                 resultFeedback.style.color = '#22c55e';
-                 pointsFeedback.textContent = `+ ${pointsWon}`;
-            } else {
-                 resultFeedback.textContent = "Tempo Scaduto!";
-                 resultFeedback.style.color = '#eab308';
-                 pointsFeedback.textContent = '';
-            }
-            setTimeout(() => {
-                nextQuestion();
-            }, 2000);
-        }
-
-        function endGame() {
-            playClickSound();
-            musicPattern.stop(); Tone.Transport.stop();
-            switchView('game-over-view');
-            updateQuizHeaders();
-
-            const maxScore = currentQuiz.questions.length * 1000;
-            const percentage = maxScore > 0 ? (score / maxScore) * 100 : 0;
-            const now = Tone.now();
-            const iconEl = document.getElementById('final-judgement-icon');
-            const textEl = document.getElementById('final-judgement-text');
-            if (percentage >= 50) {
-                playSound(winSound, "C5", "8n", now); playSound(winSound, "E5", "8n", now + 0.1);
-                playSound(winSound, "G5", "8n", now + 0.2); playSound(winSound, "C6", "4n", now + 0.3);
-                if (percentage >= 80) { iconEl.textContent = '🏆'; textEl.textContent = 'Eccellente!'; }
-                else { iconEl.textContent = '🥈'; textEl.textContent = 'Ben Fatto!'; }
-            } else {
-                playSound(loseSound, "G3", "8n", now); playSound(loseSound, "E3", "8n", now + 0.2);
-                playSound(loseSound, "C3", "4n", now + 0.4);
-                if (percentage >= 20) { iconEl.textContent = '🥉'; textEl.textContent = 'Puoi Migliorare!'; }
-                else { iconEl.textContent = '📖'; textEl.textContent = 'Continua a Studiare!'; }
-            }
-            document.getElementById('final-score').textContent = score;
-            document.getElementById('max-score').textContent = `/ ${maxScore}`;
-        }
+        // --- Logica di Gioco e Navigazione (invariata) ---
+        function startQuiz() { const now = Tone.now(); playSound(startQuizSound, "C4", "8n", now); playSound(startQuizSound, "E4", "8n", now + 0.1); playSound(startQuizSound, "G4", "8n", now + 0.2); playSound(startQuizSound, "C5", "8n", now + 0.3); if (!currentQuiz) { alert("Nessun quiz caricato!"); return; } currentQuiz.questions.forEach(q => { q.isAnswered = false; q.userScore = 0; }); if (Tone.Transport.state !== 'started') Tone.Transport.start(); musicPattern.start(0); score = 0; currentQuestionIndex = 0; displayQuestion(); }
+        function nextQuestion() { if (currentQuestionIndex < currentQuiz.questions.length - 1) { currentQuestionIndex++; displayQuestion(); } else { endGame(); } }
+        function previousQuestion() { if (currentQuestionIndex > 0) { currentQuestionIndex--; displayQuestion(); } }
+        function resetCurrentQuestion() { playClickSound(); const questionState = currentQuiz.questions[currentQuestionIndex]; score -= questionState.userScore; questionState.isAnswered = false; questionState.userScore = 0; displayQuestion(); }
+        function updateNavButtons() { const prevBtn = document.getElementById('prev-question-btn'); const nextBtn = document.getElementById('next-question-btn'); prevBtn.disabled = currentQuestionIndex === 0; nextBtn.disabled = false; if (currentQuestionIndex === currentQuiz.questions.length - 1) { nextBtn.textContent = 'Fine Quiz'; } else { nextBtn.textContent = 'Prossima >'; } }
+        function displayQuestion() { if (currentQuestionIndex >= currentQuiz.questions.length) { endGame(); return; } switchView('quiz-player-view'); updateQuizHeaders(); updateNavButtons(); const questionState = currentQuiz.questions[currentQuestionIndex]; document.getElementById('question-counter').textContent = `Domanda ${currentQuestionIndex + 1} / ${currentQuiz.questions.length}`; document.getElementById('score-display').textContent = `Punteggio: ${score}`; document.getElementById('question-text').textContent = questionState.question; const imageContainer = document.getElementById('question-image-container'); const imageEl = document.getElementById('question-image'); if (currentQuiz.image) { imageEl.src = currentQuiz.image; imageContainer.classList.remove('hidden'); } else { imageContainer.classList.add('hidden'); imageEl.src = ''; } const answersGrid = document.getElementById('answers-grid'); const answeredInfo = document.getElementById('answered-state-info'); answersGrid.innerHTML = ''; if (questionState.isAnswered) { answeredInfo.classList.remove('hidden'); answersGrid.classList.remove('hidden'); document.getElementById('timer-toggle-btn').disabled = true; if(timerInterval) clearInterval(timerInterval); document.getElementById('timer-display').textContent = TIME_PER_QUESTION; if(questionState.type === 'true-false') { answersGrid.innerHTML = ` <button class="p-4 rounded-lg text-xl font-semibold text-white card-hover answer-btn-blue opacity-50" disabled>Vero</button> <button class="p-4 rounded-lg text-xl font-semibold text-white card-hover answer-btn-red opacity-50" disabled>Falso</button> `; } else { const colors = ['answer-btn-red', 'answer-btn-blue', 'answer-btn-yellow', 'answer-btn-green']; questionState.answers.forEach((answer, index) => { const button = document.createElement('button'); button.textContent = answer; button.className = `p-4 rounded-lg text-xl font-semibold text-white card-hover ${colors[index]} opacity-50`; button.disabled = true; answersGrid.appendChild(button); }); } } else { answeredInfo.classList.add('hidden'); answersGrid.classList.remove('hidden'); attemptsLeft = questionState.answers.length; firstAttemptOnQuestion = true; setupTimer(); if(questionState.type === 'true-false') { answersGrid.innerHTML = ` <button class="p-4 rounded-lg text-xl font-semibold text-white card-hover answer-btn-blue" onclick="handleAnswer(0, this)">Vero</button> <button class="p-4 rounded-lg text-xl font-semibold text-white card-hover answer-btn-red" onclick="handleAnswer(1, this)">Falso</button> `; } else { const shuffledColors = [...answerColors].sort(() => Math.random() - 0.5); questionState.answers.forEach((answer, index) => { const button = document.createElement('button'); button.textContent = answer; button.className = `p-4 rounded-lg text-xl font-semibold text-white card-hover ${shuffledColors[index]}`; button.onclick = (event) => handleAnswer(index, event.target); answersGrid.appendChild(button); }); } } }
+        function setupTimer() { if (timerInterval) clearInterval(timerInterval); isTimerPaused = true; timeLeft = TIME_PER_QUESTION; const timerDisplay = document.getElementById('timer-display'); const toggleBtn = document.getElementById('timer-toggle-btn'); timerDisplay.textContent = timeLeft; toggleBtn.textContent = 'Avvia'; toggleBtn.disabled = false; toggleBtn.classList.remove('bg-yellow-500', 'hover:bg-yellow-600'); toggleBtn.classList.add('bg-green-500', 'hover:bg-green-600'); }
+        function toggleTimer() { isTimerPaused = !isTimerPaused; const toggleBtn = document.getElementById('timer-toggle-btn'); if (isTimerPaused) { clearInterval(timerInterval); toggleBtn.textContent = 'Avvia'; toggleBtn.classList.remove('bg-yellow-500', 'hover:bg-yellow-600'); toggleBtn.classList.add('bg-green-500', 'hover:bg-green-600'); } else { toggleBtn.textContent = 'Pausa'; toggleBtn.classList.remove('bg-green-500', 'hover:bg-green-600'); toggleBtn.classList.add('bg-yellow-500', 'hover:bg-yellow-600'); timerInterval = setInterval(() => { timeLeft--; document.getElementById('timer-display').textContent = timeLeft; if (timeLeft <= 5 && timeLeft > 0) playSound(timerTickSound, "C5", "16n", Tone.now()); if (timeLeft <= 0) { clearInterval(timerInterval); handleTimeout(); } }, 1000); } }
+        function handleTimeout() { playSound(incorrectSound, "G2", "4n", Tone.now()); document.querySelectorAll('#answers-grid button').forEach(btn => btn.disabled = true); const questionState = currentQuiz.questions[currentQuestionIndex]; questionState.isAnswered = true; questionState.userScore = 0; showIntermission(null, 0); }
+        function handleAnswer(selectedIndex, selectedButton) { if (firstAttemptOnQuestion) { clearInterval(timerInterval); isTimerPaused = true; firstAttemptOnQuestion = false; document.getElementById('timer-toggle-btn').disabled = true; } const questionData = currentQuiz.questions[currentQuestionIndex]; const isCorrect = selectedIndex === questionData.correctAnswer; if (isCorrect) { let pointsWon = 0; if (attemptsLeft >= 4) pointsWon = 500 + Math.round(500 * (timeLeft / TIME_PER_QUESTION)); else if (attemptsLeft === 3) pointsWon = 250 + Math.round(250 * (timeLeft / TIME_PER_QUESTION)); else if (attemptsLeft === 2) pointsWon = 100 + Math.round(100 * (timeLeft / TIME_PER_QUESTION)); score += pointsWon; questionData.isAnswered = true; questionData.userScore = pointsWon; document.querySelectorAll('#answers-grid button').forEach(btn => btn.disabled = true); selectedButton.classList.add('border-4', 'border-yellow-300', 'animate-pulse'); const now = Tone.now(); playSound(correctSound, "C5", "16n", now); playSound(correctSound, "E5", "16n", now + 0.1); playSound(correctSound, "G5", "16n", now + 0.2); playSound(correctSound, "C6", "16n", now + 0.3); setTimeout(() => { showIntermission(true, pointsWon); }, 1500); } else { selectedButton.disabled = true; selectedButton.classList.add('opacity-50', 'pointer-events-none'); playSound(incorrectSound, "C3", "4n", Tone.now()); attemptsLeft--; } }
+        function showIntermission(isCorrect, pointsWon) { switchView('intermission-view'); updateQuizHeaders(); const resultFeedback = document.getElementById('result-feedback'); const pointsFeedback = document.getElementById('points-feedback'); if (isCorrect === true) { resultFeedback.textContent = "Corretto!"; resultFeedback.style.color = '#22c55e'; pointsFeedback.textContent = `+ ${pointsWon}`; } else { resultFeedback.textContent = "Tempo Scaduto!"; resultFeedback.style.color = '#eab308'; pointsFeedback.textContent = ''; } setTimeout(() => { nextQuestion(); }, 2000); }
+        function endGame() { playClickSound(); musicPattern.stop(); Tone.Transport.stop(); switchView('game-over-view'); updateQuizHeaders(); const maxScore = currentQuiz.questions.length * 1000; const percentage = maxScore > 0 ? (score / maxScore) * 100 : 0; const now = Tone.now(); const iconEl = document.getElementById('final-judgement-icon'); const textEl = document.getElementById('final-judgement-text'); if (percentage >= 50) { playSound(winSound, "C5", "8n", now); playSound(winSound, "E5", "8n", now + 0.1); playSound(winSound, "G5", "8n", now + 0.2); playSound(winSound, "C6", "4n", now + 0.3); if (percentage >= 80) { iconEl.textContent = '🏆'; textEl.textContent = 'Eccellente!'; } else { iconEl.textContent = '🥈'; textEl.textContent = 'Ben Fatto!'; } } else { playSound(loseSound, "G3", "8n", now); playSound(loseSound, "E3", "8n", now + 0.2); playSound(loseSound, "C3", "4n", now + 0.4); if (percentage >= 20) { iconEl.textContent = '🥉'; textEl.textContent = 'Puoi Migliorare!'; } else { iconEl.textContent = '📖'; textEl.textContent = 'Continua a Studiare!'; } } document.getElementById('final-score').textContent = score; document.getElementById('max-score').textContent = `/ ${maxScore}`; }
 
     </script>
 </body>
