@@ -1,0 +1,224 @@
+{
+  "title": "La Coniugazione del Verbo",
+  "subtitle": "Verifica le tue conoscenze sul verbo e sulla sua coniugazione!",
+  "image": null,
+  "questions": [
+    {
+      "type": "true-false",
+      "question": "Il verbo è una parte invariabile del discorso.",
+      "answers": [
+        "Vero",
+        "Falso"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Secondo la definizione, che cos'è la coniugazione?",
+      "answers": [
+        "L'insieme delle forme che un verbo assume",
+        "La radice di una parola",
+        "Un sinonimo di verbo",
+        "Una parte invariabile del discorso"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Nella frase 'Il bambino costruisce un castello', qual è il verbo?",
+      "answers": [
+        "bambino",
+        "castello",
+        "un",
+        "costruisce"
+      ],
+      "correctAnswer": 3
+    },
+    {
+      "type": "true-false",
+      "question": "Un modo per riconoscere un verbo è verificare se la parola può essere modificata per esprimere un tempo diverso (passato, presente, futuro).",
+      "answers": [
+        "Vero",
+        "Falso"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Le categorie espresse dalla coniugazione sono:",
+      "answers": [
+        "Solo persona e numero",
+        "Persona, numero, modo e tempo",
+        "Solo modo e tempo",
+        "Genere e numero"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Nella frase 'Greta Thunberg è criticata per le assenze', il verbo esprime:",
+      "answers": [
+        "Un'azione che il soggetto compie",
+        "Un'azione che il soggetto subisce",
+        "L'esistenza del soggetto",
+        "Una caratteristica del soggetto"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "true-false",
+      "question": "Il verbo concorda con il soggetto solo nel numero, ma non nel genere.",
+      "answers": [
+        "Vero",
+        "Falso"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Quale delle seguenti è la 3ª persona plurale del verbo 'costruire' al presente?",
+      "answers": [
+        "Costruisci",
+        "Costruisce",
+        "Costruiscono",
+        "Costruiamo"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Nella frase 'C'è un problema serio', il verbo indica:",
+      "answers": [
+        "Un'azione compiuta",
+        "Un'azione subita",
+        "L'esistenza di qualcosa",
+        "Qualcosa che accade al soggetto"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "type": "true-false",
+      "question": "La parola 'tavolo' è un verbo perché ha due forme (tavolo/tavoli).",
+      "answers": [
+        "Vero",
+        "Falso"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Qual è la forma al tempo passato del verbo 'costruisce' indicata nell'esempio?",
+      "answers": [
+        "Costruirà",
+        "Costruì",
+        "Costruendo",
+        "Costruire"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Secondo il testo, quale parte del discorso ha il maggior numero di forme?",
+      "answers": [
+        "Il nome",
+        "L'aggettivo",
+        "L'avverbio",
+        "Il verbo"
+      ],
+      "correctAnswer": 3
+    },
+    {
+      "type": "true-false",
+      "question": "Un altro modo per riconoscere un verbo è verificare se può cambiare persona.",
+      "answers": [
+        "Vero",
+        "Falso"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Le diverse forme di un verbo si ottengono aggiungendo diverse desinenze a cosa?",
+      "answers": [
+        "Al prefisso",
+        "Alla radice",
+        "Al soggetto",
+        "Al complemento"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Nella frase 'Greta riceve grandi applausi', il verbo esprime:",
+      "answers": [
+        "L'esistenza del soggetto",
+        "Un'azione che il soggetto subisce",
+        "Qualcosa che accade al soggetto",
+        "Una caratteristica del soggetto"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "type": "true-false",
+      "question": "Verbo, nome, articolo e aggettivo sono tutte parti variabili del discorso.",
+      "answers": [
+        "Vero",
+        "Falso"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Qual è la forma al tempo futuro del verbo 'costruisce' indicata nell'esempio?",
+      "answers": [
+        "Costruirà",
+        "Costruiscono",
+        "Costruì",
+        "Costruisci"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Il verbo è la parte del discorso che esprime informazioni sul...",
+      "answers": [
+        "soggetto",
+        "complemento oggetto",
+        "predicato nominale",
+        "luogo"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "type": "true-false",
+      "question": "Preposizione e congiunzione sono parti variabili del discorso.",
+      "answers": [
+        "Vero",
+        "Falso"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Nella frase 'Domani il bambino costruirà un castello', la parola 'costruirà' è un verbo perché...",
+      "answers": [
+        "Indica un oggetto",
+        "È una parola lunga",
+        "Esprime un'azione collocata nel tempo futuro",
+        "È all'inizio della frase"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Nella forma verbale 'costruiamo', qual è la radice e qual è la desinenza?",
+      "answers": [
+        "Radice: costru-, Desinenza: -iamo",
+        "Radice: costruia-, Desinenza: -mo",
+        "Radice: costr-, Desinenza: -uiamo",
+        "Radice: costrui-, Desinenza: -amo"
+      ],
+      "correctAnswer": 0
+    }
+  ]
+}
