@@ -17,6 +17,38 @@
         .repo-card { border: 1px solid #ccc; border-radius: 5px; padding: 15px; margin-bottom: 10px; background: #fff; display: flex; justify-content: space-between; align-items: center; }
         .repo-card-info { flex-grow: 1; }
         .repo-card-actions button { font-size: 12px; padding: 5px 8px; margin-left: 5px; }
+
+        /* --- CSS AGGIUNTO PER LA MODALE DI MODIFICA --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            display: none; /* Nascosto di default */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .modal-content {
+            background: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .modal-header h2 { margin: 0; }
+        .close-button { font-size: 24px; font-weight: bold; cursor: pointer; border: none; background: none; }
     </style>
 </head>
 <body>
@@ -52,6 +84,28 @@
         </div>
     </div>
 
+    <div id="editModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Modifica Quiz</h2>
+                <button id="closeModalBtn" class="close-button">&times;</button>
+            </div>
+            <input type="hidden" id="editQuizIndex">
+            
+            <label for="editQuizTitle">Titolo:</label>
+            <input type="text" id="editQuizTitle" placeholder="Titolo del quiz">
+            
+            <label for="editQuizDescription">Descrizione:</label>
+            <input type="text" id="editQuizDescription" placeholder="Descrizione">
+            
+            <label for="editQuizPath">Percorso:</label>
+            <input type="text" id="editQuizPath" placeholder="Percorso del file">
+            
+            <button id="saveChangesBtn">Salva Modifiche</button>
+        </div>
+    </div>
+
+
     <script>
     document.addEventListener('DOMContentLoaded', () => {
         // --- STATO DELL'APPLICAZIONE ---
@@ -69,10 +123,19 @@
         const addQuizBtn = document.getElementById('addQuizBtn');
         const copyJsonBtn = document.getElementById('copyJsonBtn');
 
+        // --- RIFERIMENTI DOM AGGIUNTI PER LA MODALE ---
+        const editModal = document.getElementById('editModal');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const saveChangesBtn = document.getElementById('saveChangesBtn');
+        const editQuizIndex = document.getElementById('editQuizIndex');
+        const editQuizTitle = document.getElementById('editQuizTitle');
+        const editQuizDescription = document.getElementById('editQuizDescription');
+        const editQuizPath = document.getElementById('editQuizPath');
+
         // --- FUNZIONI DI RENDER E AGGIORNAMENTO ---
 
         function renderRepository() {
-            repositoryList.innerHTML = ''; // Pulisce la vista
+            repositoryList.innerHTML = ''; 
             if (repositoryData.length === 0) {
                 repositoryList.innerHTML = '<p>Il repository è vuoto. Aggiungi un nuovo quiz usando il modulo qui sotto.</p>';
             }
@@ -80,14 +143,17 @@
             repositoryData.forEach((quiz, index) => {
                 const card = document.createElement('div');
                 card.className = 'repo-card';
+                // --- MODIFICA HTML: Aggiunta descrizione e pulsante "Modifica" ---
                 card.innerHTML = `
                     <div class="repo-card-info">
                         <strong>${quiz.title}</strong>
-                        <p style="margin: 5px 0 0 0; font-size: 14px; color: #555;">${quiz.path}</p>
+                        <p style="margin: 5px 0; font-size: 14px; color: #555;">${quiz.description || 'Nessuna descrizione'}</p>
+                        <p style="margin: 5px 0 0 0; font-size: 12px; color: #888; font-family: monospace;">${quiz.path}</p>
                     </div>
                     <div class="repo-card-actions">
                         <button class="move-up" data-index="${index}" ${index === 0 ? 'disabled' : ''}>▲ Su</button>
                         <button class="move-down" data-index="${index}" ${index === repositoryData.length - 1 ? 'disabled' : ''}>▼ Giù</button>
+                        <button class="edit" data-index="${index}" style="background-color:#ffc107;">✏️ Modifica</button>
                         <button class="delete" data-index="${index}" style="background-color:#dc3545;">🗑️ Elimina</button>
                     </div>
                 `;
@@ -97,10 +163,6 @@
         }
 
         function updateJsonOutput() {
-            if (repositoryData.length === 0) {
-                jsonOutput.textContent = '[]';
-                return;
-            }
             jsonOutput.textContent = JSON.stringify(repositoryData, null, 2);
         }
 
@@ -112,12 +174,51 @@
         }
 
         function moveQuiz(index, direction) {
-            if (direction === -1 && index === 0) return; // Non può andare più su
-            if (direction === 1 && index === repositoryData.length - 1) return; // Non può andare più giù
+            if (direction === -1 && index === 0) return;
+            if (direction === 1 && index === repositoryData.length - 1) return; 
 
             const item = repositoryData.splice(index, 1)[0];
             repositoryData.splice(index + direction, 0, item);
             renderRepository();
+        }
+
+        // --- NUOVE FUNZIONI PER GESTIRE LA MODALE DI MODIFICA ---
+        function openEditModal(index) {
+            const quizToEdit = repositoryData[index];
+            
+            // Popola i campi della modale con i dati attuali
+            editQuizIndex.value = index;
+            editQuizTitle.value = quizToEdit.title;
+            editQuizDescription.value = quizToEdit.description;
+            editQuizPath.value = quizToEdit.path;
+
+            // Mostra la modale
+            editModal.style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            editModal.style.display = 'none';
+        }
+
+        function saveQuizChanges() {
+            const index = parseInt(editQuizIndex.value, 10);
+            const originalQuiz = repositoryData[index];
+
+            const updatedQuiz = {
+                ...originalQuiz, // Mantiene l'ID e altri campi non modificati
+                title: editQuizTitle.value.trim(),
+                description: editQuizDescription.value.trim(),
+                path: editQuizPath.value.trim()
+            };
+
+            if (!updatedQuiz.title || !updatedQuiz.description || !updatedQuiz.path) {
+                alert('Tutti i campi devono essere compilati.');
+                return;
+            }
+
+            repositoryData[index] = updatedQuiz;
+            renderRepository();
+            closeEditModal();
         }
 
         // --- GESTIONE EVENTI ---
@@ -129,7 +230,7 @@
                 return;
             }
             try {
-                const response = await fetch(url, { cache: "no-store" }); // Aggiunto no-store per evitare la cache
+                const response = await fetch(url, { cache: "no-store" });
                 if (!response.ok) throw new Error(`Errore HTTP: ${response.status}`);
                 repositoryData = await response.json();
                 renderRepository();
@@ -150,7 +251,6 @@
                 return;
             }
 
-            // Aggiungiamo un id univoco basato sul timestamp per coerenza
             const newQuiz = {
                 id: `quiz_${Date.now()}`,
                 title,
@@ -161,14 +261,15 @@
             repositoryData.push(newQuiz);
             renderRepository();
 
-            // Pulisci i campi
             quizTitleInput.value = '';
             quizDescriptionInput.value = '';
             quizPathInput.value = '';
         });
         
         repositoryList.addEventListener('click', (e) => {
-            const target = e.target;
+            const target = e.target.closest('button'); // Assicura di catturare il pulsante
+            if (!target) return;
+            
             const index = parseInt(target.dataset.index, 10);
 
             if (target.classList.contains('delete')) {
@@ -179,6 +280,8 @@
                 moveQuiz(index, -1);
             } else if (target.classList.contains('move-down')) {
                 moveQuiz(index, 1);
+            } else if (target.classList.contains('edit')) { // --- NUOVO EVENTO ---
+                openEditModal(index);
             }
         });
         
@@ -188,8 +291,19 @@
                 .catch(err => console.error('Errore durante la copia:', err));
         });
 
+        // --- NUOVI EVENTI PER LA MODALE ---
+        closeModalBtn.addEventListener('click', closeEditModal);
+        saveChangesBtn.addEventListener('click', saveQuizChanges);
+
+        // Chiudi la modale se l'utente clicca sull'overlay esterno
+        editModal.addEventListener('click', (e) => {
+            if (e.target === editModal) {
+                closeEditModal();
+            }
+        });
+
         // Init
-        updateJsonOutput();
+        renderRepository(); // Chiamata iniziale per mostrare lo stato vuoto
     });
     </script>
 </body>
