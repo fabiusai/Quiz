@@ -1,0 +1,226 @@
+{
+  "title": "Quiz di Ortografia Italiana",
+  "subtitle": "Metti alla prova la tua conoscenza delle regole ortografiche!",
+  "image": "data:image/gif;base64,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",
+  "questions": [
+    {
+      "question": "Qual è la forma corretta per indicare 'una piccola quantità'?",
+      "type": "multiple-choice",
+      "correctAnswer": 1,
+      "answers": [
+        "un pò",
+        "un po'",
+        "un po",
+        "un'po"
+      ]
+    },
+    {
+      "question": "Come si scrive correttamente la domanda?",
+      "type": "multiple-choice",
+      "correctAnswer": 2,
+      "answers": [
+        "Qual'è il tuo colore preferito?",
+        "Quale è il tuo colore preferito?",
+        "Qual è il tuo colore preferito?",
+        "Qualle è il tuo colore preferito?"
+      ]
+    },
+    {
+      "question": "Nella frase 'Portalo con se', la parola 'se' è scritta correttamente.",
+      "type": "true-false",
+      "correctAnswer": 1,
+      "answers": [
+        "Vero",
+        "Falso"
+      ]
+    },
+    {
+      "question": "Completa la frase: 'Il gatto ___ sul divano ___ dorme.'",
+      "type": "multiple-choice",
+      "correctAnswer": 0,
+      "answers": [
+        "è / e",
+        "e / è",
+        "è / è",
+        "e / e"
+      ]
+    },
+    {
+      "question": "Completa la frase: 'La nonna mi ___ un regalo quando vado ___ lei.'",
+      "type": "multiple-choice",
+      "correctAnswer": 1,
+      "answers": [
+        "dà / dà",
+        "dà / da",
+        "da / da",
+        "da / dà"
+      ]
+    },
+    {
+      "question": "La parola 'si', quando significa 'sì' (affermazione), si scrive senza accento.",
+      "type": "true-false",
+      "correctAnswer": 1,
+      "answers": [
+        "Vero",
+        "Falso"
+      ]
+    },
+    {
+      "question": "Quale parola è scritta correttamente?",
+      "type": "multiple-choice",
+      "correctAnswer": 1,
+      "answers": [
+        "Sopratutto",
+        "Soprattutto",
+        "Sopratuto",
+        "Soprattuto"
+      ]
+    },
+    {
+      "question": "Scegli la parola corretta per completare la frase: 'Ho letto un libro sul ______.'",
+      "type": "multiple-choice",
+      "correctAnswer": 0,
+      "answers": [
+        "cuore",
+        "quore",
+        "coure",
+        "cqore"
+      ]
+    },
+    {
+      "question": "Quale di queste parole che contengono il suono 'cqu' è scritta correttamente?",
+      "type": "multiple-choice",
+      "correctAnswer": 1,
+      "answers": [
+        "Aquistare",
+        "Acquisto",
+        "Acqisto",
+        "Aqcuisto"
+      ]
+    },
+    {
+      "question": "Il plurale della parola 'camicia' è 'camice'.",
+      "type": "true-false",
+      "correctAnswer": 1,
+      "answers": [
+        "Vero",
+        "Falso"
+      ]
+    },
+    {
+      "question": "Qual è il plurale corretto di 'mago'?",
+      "type": "multiple-choice",
+      "correctAnswer": 0,
+      "answers": [
+        "Maghi",
+        "Magi",
+        "Magoi",
+        "Maghe"
+      ]
+    },
+    {
+      "question": "Quale di queste parole è scritta in modo corretto?",
+      "type": "multiple-choice",
+      "correctAnswer": 0,
+      "answers": [
+        "Scienza",
+        "Scenza",
+        "Sciensa",
+        "Scensa"
+      ]
+    },
+    {
+      "question": "La parola 'sufficiente' si scrive 'sufficente'.",
+      "type": "true-false",
+      "correctAnswer": 1,
+      "answers": [
+        "Vero",
+        "Falso"
+      ]
+    },
+    {
+      "question": "Quale di queste frasi è scritta correttamente?",
+      "type": "multiple-choice",
+      "correctAnswer": 2,
+      "answers": [
+        "Oggi o mangiato la pasta.",
+        "Ti a detto di venire?",
+        "Loro hanno una bella casa.",
+        "Ha che ora ci vediamo?"
+      ]
+    },
+    {
+      "question": "Completa con 'ho', 'o', 'ha', 'a': 'Non so se ___ voglia di andare ___ piedi ___ preferisco la bici.'",
+      "type": "multiple-choice",
+      "correctAnswer": 1,
+      "answers": [
+        "o / a / ho",
+        "ho / a / o",
+        "ha / a / o",
+        "o / ha / ho"
+      ]
+    },
+    {
+      "question": "Qual è la forma corretta per il maschile singolare?",
+      "type": "multiple-choice",
+      "correctAnswer": 1,
+      "answers": [
+        "un'orologio",
+        "un orologio",
+        "uno orologio",
+        "un' orologio"
+      ]
+    },
+    {
+      "question": "La parola 'cielo' si scrive con la 'i' perché è una parola che fa eccezione.",
+      "type": "true-false",
+      "correctAnswer": 0,
+      "answers": [
+        "Vero",
+        "Falso"
+      ]
+    },
+    {
+      "question": "Qual è il plurale di 'spiaggia'?",
+      "type": "multiple-choice",
+      "correctAnswer": 0,
+      "answers": [
+        "Spiagge",
+        "Spiaggie",
+        "Spiaggi",
+        "Spiaggge"
+      ]
+    },
+    {
+      "question": "Completa la frase: 'Non mi piace ___ il pesce ___ la carne, ___ vorrei un po' per il gatto.'",
+      "type": "multiple-choice",
+      "correctAnswer": 0,
+      "answers": [
+        "né / né / ne",
+        "ne / ne / né",
+        "né / ne / né",
+        "ne / né / né"
+      ]
+    },
+    {
+      "question": "Come si divide in sillabe la parola 'acquazzone'?",
+      "type": "multiple-choice",
+      "correctAnswer": 2,
+      "answers": [
+        "a-cqua-zzo-ne",
+        "ac-quaz-zo-ne",
+        "ac-qua-zzo-ne",
+        "aq-quaz-zo-ne"
+      ]
+    },
+    {
+      "question": "La parola 'incoscenza' è scritta correttamente.",
+      "type": "true-false",
+      "correctAnswer": 1,
+      "answers": [
+        "Vero",
+        "Falso"
+      ]
+    }
+  ]
+}
