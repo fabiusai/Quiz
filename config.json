@@ -10,5 +10,11 @@
     "title": "Ortografia italiana",
     "description": "Metti alla prova le tue conoscenze sull'ortografia italiana",
     "path": "repo/quiz_di_ortografia_italiana.json"
+  },
+  {
+    "id": "quiz_1759945733012",
+    "title": "Il Verbo: Radice, Desinenza e Coniugazioni",
+    "description": "\"Un quiz per testare le tue conoscenze sulla struttura del verbo e sui verbi essere e avere",
+    "path": "repo/essereavere"
   }
 ]
