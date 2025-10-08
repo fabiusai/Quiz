@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quiz Maker in Stile Kahoot</title>
-    <!-- Tailwind CSS per lo stile -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Tone.js per gli effetti sonori -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
     <style>
         /* Stili personalizzati per migliorare l'aspetto */
@@ -64,7 +62,6 @@
 </head>
 <body class="bg-gradient-to-br from-indigo-500 to-purple-600 min-h-screen flex items-center justify-center p-4 text-white">
 
-    <!-- Overlay per sblocco audio su iOS -->
     <div id="audio-unlock-overlay" class="view active">
         <div class="text-center">
             <h1 class="text-4xl font-bold mb-4">Benvenuto in Quiz Master!</h1>
@@ -78,7 +75,6 @@
 
     <div id="app-container" class="w-full max-w-4xl mx-auto relative">
 
-        <!-- Schermata Principale -->
         <div id="main-menu-view" class="view text-center">
             <div>
                 <h1 class="text-5xl font-bold mb-4 animate-pulse">Quiz Master</h1>
@@ -103,10 +99,18 @@
                         </button>
                      </div>
                  </div>
-            </div>
+                 
+                <div id="repository-section" class="mt-12 w-full text-left">
+                    <h2 class="text-3xl font-bold mb-4 text-center">Quiz dal Repository</h2>
+                    <div class="mb-6">
+                        <input type="text" id="repo-filter-input" onkeyup="filterRepositoryQuizzes()" placeholder="Filtra per titolo o descrizione..." class="w-full max-w-lg mx-auto p-3 rounded-md bg-white/20 border border-white/30 focus:outline-none focus:ring-2 focus:ring-yellow-400 placeholder-white/70 text-white">
+                    </div>
+                    <div id="repository-quizzes-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        </div>
+                </div>
+                </div>
         </div>
 
-        <!-- Schermata Creazione Quiz -->
         <div id="quiz-creator-view" class="view bg-white/10 p-8 rounded-lg shadow-2xl backdrop-blur-md">
             <h2 class="text-3xl font-bold mb-6 text-center">Crea il Tuo Quiz</h2>
             <div class="flex justify-center gap-4 mb-6 border-b border-white/20 pb-6">
@@ -144,8 +148,7 @@
             </div>
             <hr class="my-6 border-white/20">
             <div id="questions-container">
-                <!-- Le domande verranno aggiunte qui dinamicamente -->
-            </div>
+                </div>
             <div class="flex justify-between items-center mt-6">
                 <button onclick="addQuestion(); playClickSound();" class="bg-blue-500 hover:bg-blue-600 font-bold py-2 px-4 rounded-md card-hover">+ Aggiungi Domanda</button>
                 <div>
@@ -156,7 +159,6 @@
             </div>
         </div>
 
-        <!-- Schermata di Gioco -->
         <div id="quiz-player-view" class="view text-center">
             <div class="bg-white/10 p-6 rounded-lg shadow-2xl backdrop-blur-md w-full relative">
                 <div id="quiz-header-player" class="text-center mb-4 border-b border-white/20 pb-4"></div>
@@ -175,8 +177,7 @@
                     <h2 id="question-text" class="text-3xl font-bold"></h2>
                 </div>
                 <div id="answers-grid" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
-                    <!-- I pulsanti delle risposte verranno aggiunti qui -->
-                </div>
+                    </div>
                 <div id="answered-state-info" class="hidden text-center mt-6">
                     <p class="text-lg mb-4">Hai già risposto a questa domanda.</p>
                     <button id="reset-question-btn" onclick="resetCurrentQuestion()" class="bg-yellow-500 hover:bg-yellow-600 font-bold py-2 px-6 rounded-md">Rispondi di Nuovo</button>
@@ -188,7 +189,6 @@
             </div>
         </div>
 
-        <!-- Schermata di Intervallo -->
         <div id="intermission-view" class="view text-center">
             <div class="bg-white/10 p-12 rounded-lg shadow-2xl backdrop-blur-md w-full max-w-lg">
                  <div id="quiz-header-intermission" class="text-center mb-6 border-b border-white/20 pb-4"></div>
@@ -197,7 +197,6 @@
             </div>
         </div>
 
-        <!-- Schermata Fine Gioco -->
         <div id="game-over-view" class="view text-center">
              <div class="bg-white/10 p-12 rounded-lg shadow-2xl backdrop-blur-md">
                 <div id="quiz-header-gameover" class="text-center mb-6 border-b border-white/20 pb-4"></div>
@@ -214,7 +213,6 @@
         </div>
     </div>
     
-    <!-- Controlli Muto -->
     <div id="mute-controls">
         <button id="mute-music-btn" onclick="toggleMusicMute()" class="p-3 bg-white/20 rounded-full card-hover backdrop-blur-sm">
             <svg id="music-on-icon" xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
@@ -234,6 +232,8 @@
         let questionIdCounter = 0;
         let isMusicMuted = false;
         let isSfxMuted = false;
+        // NUOVA VARIABILE GLOBALE: Per memorizzare i quiz del repository
+        let repositoryQuizzes = [];
         
         // Stato del Gioco per domanda
         let attemptsLeft = 0;
@@ -291,6 +291,8 @@
             document.getElementById('audio-unlock-overlay').classList.remove('active');
             switchView('main-menu-view');
             playClickSound();
+            // NUOVA CHIAMATA: Carica il repository all'avvio
+            loadRepository();
         }
         function playSound(sound, notes, duration, time) {
             if (Tone.context.state !== 'running') return;
@@ -312,6 +314,103 @@
             document.getElementById('sfx-on-icon').classList.toggle('hidden');
             document.getElementById('sfx-off-icon').classList.toggle('hidden');
             playClickSound();
+        }
+
+        // --- NUOVE FUNZIONI: Gestione Repository Quiz ---
+        
+        /**
+         * Carica il file config.json e visualizza i quiz disponibili.
+         */
+        async function loadRepository() {
+            try {
+                // Sostituisci 'config.json' con l'URL completo se si trova su un altro server.
+                const response = await fetch('config.json');
+                if (!response.ok) throw new Error('La risposta della rete non era valida.');
+                repositoryQuizzes = await response.json();
+                displayRepositoryQuizzes(repositoryQuizzes);
+            } catch (error) {
+                console.error("Errore nel caricamento del repository:", error);
+                document.getElementById('repository-quizzes-container').innerHTML = `<p class="text-center col-span-full">Impossibile caricare i quiz dal repository.</p>`;
+            }
+        }
+
+        /**
+         * Mostra le card dei quiz nell'interfaccia utente.
+         * @param {Array} quizzes L'array di quiz da visualizzare.
+         */
+        function displayRepositoryQuizzes(quizzes) {
+            const container = document.getElementById('repository-quizzes-container');
+            container.innerHTML = ''; // Pulisce il contenuto precedente
+
+            if (quizzes.length === 0) {
+                container.innerHTML = `<p class="text-center col-span-full">Nessun quiz trovato.</p>`;
+                return;
+            }
+
+            quizzes.forEach(quiz => {
+                const quizCard = document.createElement('div');
+                quizCard.className = 'card-hover bg-white/20 p-6 rounded-lg text-left flex flex-col justify-between';
+                quizCard.innerHTML = `
+                    <div>
+                        <h3 class="text-xl font-bold mb-2">${quiz.title}</h3>
+                        <p class="text-sm text-white/80">${quiz.description}</p>
+                    </div>
+                    <button onclick="loadQuizFromRepo('${quiz.id}')" class="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-lg w-full">
+                        Carica Quiz
+                    </button>
+                `;
+                container.appendChild(quizCard);
+            });
+        }
+        
+        /**
+         * Filtra i quiz visualizzati in base all'input dell'utente.
+         */
+        function filterRepositoryQuizzes() {
+            const filterText = document.getElementById('repo-filter-input').value.toLowerCase();
+            const filteredQuizzes = repositoryQuizzes.filter(quiz =>
+                quiz.title.toLowerCase().includes(filterText) ||
+                quiz.description.toLowerCase().includes(filterText)
+            );
+            displayRepositoryQuizzes(filteredQuizzes);
+        }
+
+        /**
+         * Carica un singolo file quiz JSON dal repository tramite il suo ID.
+         * @param {string} quizId L'ID del quiz da caricare.
+         */
+        async function loadQuizFromRepo(quizId) {
+            playClickSound();
+            const quizInfo = repositoryQuizzes.find(q => q.id === quizId);
+            if (!quizInfo) {
+                alert("Quiz non trovato nel repository.");
+                return;
+            }
+
+            try {
+                const response = await fetch(quizInfo.path);
+                if (!response.ok) throw new Error(`Impossibile caricare il quiz da ${quizInfo.path}`);
+                
+                const quizData = await response.json();
+
+                if (!quizData.title || !quizData.questions) throw new Error("Formato del file quiz non valido.");
+                currentQuiz = quizData;
+                
+                let titleHtml = `Quiz Caricato: "${currentQuiz.title}"`;
+                if (currentQuiz.subtitle) {
+                    titleHtml += `<br><span class="text-xl font-normal text-white/80">${currentQuiz.subtitle}</span>`;
+                }
+                document.getElementById('loaded-quiz-title').innerHTML = titleHtml;
+                document.getElementById('play-quiz-section').classList.remove('hidden');
+
+                // Fa scorrere la vista fino alla sezione di gioco
+                document.getElementById('play-quiz-section').scrollIntoView({ behavior: 'smooth' });
+
+            } catch (error) {
+                alert("Errore nel caricamento del quiz dal repository: " + error.message);
+                console.error("Errore Fetch:", error);
+                document.getElementById('play-quiz-section').classList.add('hidden');
+            }
         }
 
         // --- Funzioni UI ---
@@ -402,8 +501,7 @@
                 </div>
                 <textarea placeholder="Testo della domanda..." class="w-full p-2 rounded-md bg-white/20 border border-white/30 mb-4 h-24 resize-none focus:outline-none focus:ring-2 focus:ring-yellow-400" data-question-text></textarea>
                 <div id="answers-editor-${questionId}" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <!-- Contenuto dinamico -->
-                </div>
+                    </div>
             `;
             questionsContainer.appendChild(questionCard);
 
@@ -886,4 +984,3 @@
     </script>
 </body>
 </html>
-
