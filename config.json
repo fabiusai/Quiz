@@ -1,0 +1,8 @@
+[
+  {
+    "id": "grammatica01",
+    "title": "La Coniugazione del Verbo",
+    "description": "Verifica le tue conoscenze sul verbo e sulla sua coniugazione!",
+    "path": "/repo/verbi_01.json"
+  }
+]
