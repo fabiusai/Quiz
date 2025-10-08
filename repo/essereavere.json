@@ -1,0 +1,226 @@
+{
+  "title": "Il Verbo: Radice, Desinenza e Coniugazioni",
+  "subtitle": "Un quiz per testare le tue conoscenze sulla struttura del verbo e sui verbi essere e avere.",
+  "image": "data:image/jpeg;base64,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",
+  "questions": [
+    {
+      "type": "multiple-choice",
+      "question": "In ogni forma verbale, come si chiama la parte invariabile che comunica il significato?",
+      "answers": [
+        "Desinenza",
+        "Radice",
+        "Coniugazione",
+        "Vocale tematica"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "true-false",
+      "question": "La desinenza di un verbo trasmette informazioni sulla persona, il numero, il modo e il tempo.",
+      "answers": [
+        "Vero",
+        "Falso"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Qual è la radice del verbo \"cantare\"?",
+      "answers": [
+        "cant-",
+        "canta-",
+        "can-",
+        "-are"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "I verbi che terminano in \"-are\" all'infinito appartengono alla...",
+      "answers": [
+        "Prima coniugazione",
+        "Seconda coniugazione",
+        "Terza coniugazione",
+        "Coniugazione propria"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Quale di questi verbi appartiene alla seconda coniugazione?",
+      "answers": [
+        "Amare",
+        "Partire",
+        "Vedere",
+        "Giocare"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "type": "true-false",
+      "question": "I verbi \"essere\" e \"avere\" hanno una coniugazione propria e non rientrano nelle tre coniugazioni regolari.",
+      "answers": [
+        "Vero",
+        "Falso"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Nella frase \"Ho mangiato una mela\", il verbo \"avere\" ha la funzione di...",
+      "answers": [
+        "Verbo autonomo",
+        "Verbo ausiliare",
+        "Verbo irregolare",
+        "Nessuna delle precedenti"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Qual è la vocale tematica della terza coniugazione (-ire)?",
+      "answers": [
+        "a",
+        "e",
+        "i",
+        "o"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Nella frase \"Ho sempre freddo\", il verbo \"avere\" è usato con significato autonomo di...",
+      "answers": [
+        "Possedere",
+        "Ottenere",
+        "Ricevere",
+        "Sentire/Provare"
+      ],
+      "correctAnswer": 3
+    },
+    {
+      "type": "true-false",
+      "question": "Il verbo \"aprire\" appartiene alla prima coniugazione.",
+      "answers": [
+        "Vero",
+        "Falso"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Nella frase \"Il mio appartamento è al quinto piano\", il verbo \"essere\" significa...",
+      "answers": [
+        "Appartenere",
+        "Esistere",
+        "Trovarsi",
+        "Nessuno di questi"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Per trovare la radice del verbo \"partirono\", devo prima trovare il suo infinito, che è...",
+      "answers": [
+        "Partire",
+        "Partuto",
+        "Partente",
+        "Partere"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "type": "true-false",
+      "question": "La radice del verbo \"temere\" è \"tem-\".",
+      "answers": [
+        "Vero",
+        "Falso"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "In quale frase il verbo \"essere\" è usato come ausiliare?",
+      "answers": [
+        "Sono ammirati da tutti.",
+        "Ci sono erbacce nel prato.",
+        "Questo tablet è di mio fratello.",
+        "Non sapevo che ci fossero così tante specie di coralli."
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "La vocale tematica \"a\" è presente nell'infinito dei verbi della...",
+      "answers": [
+        "Prima coniugazione",
+        "Seconda coniugazione",
+        "Terza coniugazione",
+        "Tutte le coniugazioni"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "type": "true-false",
+      "question": "I verbi \"essere\" e \"avere\" sono ausiliari perché non possono mai essere usati da soli con un significato proprio.",
+      "answers": [
+        "Vero",
+        "Falso"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Nella forma verbale \"parliamo\", qual è la desinenza?",
+      "answers": [
+        "parl-",
+        "parli-",
+        "-amo",
+        "-iamo"
+      ],
+      "correctAnswer": 3
+    },
+    {
+      "type": "multiple-choice",
+      "question": "A quale coniugazione appartiene il verbo \"ridere\"?",
+      "answers": [
+        "Prima (-are)",
+        "Seconda (-ere)",
+        "Terza (-ire)",
+        "Nessuna delle precedenti"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Nella frase \"Laura ha ricevuto molti complimenti\", il verbo \"avere\" ha il significato di...",
+      "answers": [
+        "Possedere",
+        "Ottenere",
+        "Ricevere",
+        "Provare"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "type": "true-false",
+      "question": "La frase \"Non sapevo che esistessero così tante specie di coralli\" usa il verbo \"essere\" con significato di \"esistere\".",
+      "answers": [
+        "Vero",
+        "Falso"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Quale parte del verbo comunica il significato?",
+      "answers": [
+        "La desinenza",
+        "La coniugazione",
+        "La radice",
+        "La vocale tematica"
+      ],
+      "correctAnswer": 2
+    }
+  ]
+}
