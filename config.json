@@ -16,5 +16,11 @@
     "title": "Il Verbo: Radice, Desinenza e Coniugazioni",
     "description": "Un quiz per testare le tue conoscenze sulla struttura del verbo e sui verbi essere e avere",
     "path": "repo/essereavere.json"
+  },
+  {
+    "id": "quiz_1760804886635",
+    "title": "Il testo argomentativo",
+    "description": "Un quiz per conoscere meglio il testo argomentativo",
+    "path": "https://github.com/fabiusai/Quiz/blob/main/repo/il_testo_argomentativo.json"
   }
 ]
