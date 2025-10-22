@@ -22,5 +22,11 @@
     "title": "Il testo argomentativo",
     "description": "Un quiz per conoscere meglio il testo argomentativo",
     "path": "repo/il_testo_argomentativo.json"
+  },
+  {
+    "id": "quiz_1761119066884",
+    "title": "Quiz sull'Analisi del Periodo",
+    "description": "Metti alla prova la tua conoscenza delle frasi complesse",
+    "path": "repo/analisi_del_periodo.json"
   }
 ]
