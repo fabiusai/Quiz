@@ -1,0 +1,256 @@
+{
+  "title": "Quiz sull'Avverbio",
+  "subtitle": "Testa la tua conoscenza degli avverbi nella grammatica italiana.",
+  "image": null,
+  "questions": [
+    {
+      "type": "multiple-choice",
+      "question": "Secondo la definizione, che cos'è l'avverbio?",
+      "answers": [
+        "La parte variabile del discorso che modifica un nome.",
+        "La parte invariabile del discorso che modifica o precisa il significato di un'altra parola o frase.",
+        "Una parola che collega due frasi.",
+        "Una parola che si aggiunge solo al verbo."
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "L'avverbio può modificare diverse parti del discorso. Quale delle seguenti opzioni NON è menzionata nel testo?",
+      "answers": [
+        "Un verbo (es. \"spesso giudicano\")",
+        "Un aggettivo (es. \"troppo curiosi\")",
+        "Un altro avverbio (es. \"molto spesso\")",
+        "Un articolo (es. \"quasi il\")"
+      ],
+      "correctAnswer": 3
+    },
+    {
+      "type": "true-false",
+      "question": "L'avverbio è una parte variabile del discorso, cioè cambia forma in base al genere e al numero.",
+      "answers": [
+        "Vero",
+        "Falso"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Come si chiama un avverbio formato da una sola parola non scomponibile, come 'bene', 'qui' o 'oggi'?",
+      "answers": [
+        "Avverbio derivato",
+        "Avverbio composto",
+        "Avverbio primitivo",
+        "Locuzione avverbiale"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Avverbi come 'giammai' (già + mai) o 'almeno' (al + meno) sono definiti:",
+      "answers": [
+        "Composti",
+        "Derivati",
+        "Primitivi",
+        "Locuzioni"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "La maggior parte degli avverbi derivati che terminano in '-mente' si forma a partire da:",
+      "answers": [
+        "Un nome al maschile singolare",
+        "Un verbo all'infinito",
+        "Un aggettivo al femminile singolare",
+        "Un altro avverbio"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Avverbi come 'ginocchioni' o 'bocconi', che indicano una posizione del corpo, da cosa derivano?",
+      "answers": [
+        "Da aggettivi con suffisso -oni",
+        "Da nomi o verbi con suffisso -oni",
+        "Sono avverbi primitivi",
+        "Sono locuzioni avverbiali"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "true-false",
+      "question": "Una 'locuzione avverbiale' è una singola parola che funziona come un avverbio.",
+      "answers": [
+        "Vero",
+        "Falso"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Quale delle seguenti è una locuzione avverbiale?",
+      "answers": [
+        "Velocemente",
+        "Forse",
+        "In fretta",
+        "Sopra"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Come si distingue un aggettivo (come 'troppo') da un avverbio (come 'troppo')?",
+      "answers": [
+        "L'avverbio finisce sempre in -mente, l'aggettivo no.",
+        "L'aggettivo si riferisce a un nome ed è variabile, l'avverbio si riferisce a un verbo ed è invariabile.",
+        "L'avverbio si riferisce a un nome, l'aggettivo a un verbo.",
+        "L'aggettivo è sempre dopo il nome, l'avverbio sempre prima del verbo."
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Nella frase 'Ho mangiato troppo', la parola 'troppo' che funzione ha?",
+      "answers": [
+        "Aggettivo, perché si riferisce a 'io' (soggetto sottinteso).",
+        "Avverbio, perché si riferisce al verbo 'ho mangiato' ed è invariabile.",
+        "Nome, indica una quantità.",
+        "Aggettivo, perché si riferisce a una quantità non specificata di cibo."
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Come si distingue un avverbio (come 'fuori') da una preposizione (come 'fuori')?",
+      "answers": [
+        "L'avverbio modifica un verbo, la preposizione introduce un nome.",
+        "L'avverbio introduce un nome, la preposizione modifica un verbo.",
+        "Sono la stessa cosa, non c'è distinzione.",
+        "L'avverbio è variabile, la preposizione è invariabile."
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Nella frase 'Metti il gatto fuori casa!', la parola 'fuori' che funzione ha?",
+      "answers": [
+        "Avverbio, perché modifica il verbo 'metti'.",
+        "Aggettivo, perché si riferisce a 'gatto'.",
+        "Preposizione, perché introduce il nome 'casa'.",
+        "Avverbio, perché indica un luogo."
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Quando parole come 'come', 'dove', 'quando' e 'quanto' sono usate in interrogative dirette (con ?), che funzione hanno?",
+      "answers": [
+        "Congiunzioni",
+        "Preposizioni",
+        "Avverbi",
+        "Aggettivi"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "type": "multiple-choice",
+      "question": "A quale domanda rispondono gli avverbi di modo (es. 'rapidamente')?",
+      "answers": [
+        "Quando?",
+        "Dove?",
+        "Quanto?",
+        "In che modo?"
+      ],
+      "correctAnswer": 3
+    },
+    {
+      "type": "multiple-choice",
+      "question": "L'avverbio 'domani' a quale categoria appartiene?",
+      "answers": [
+        "Avverbio di modo",
+        "Avverbio di tempo",
+        "Avverbio di luogo",
+        "Avverbio di valutazione"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "L'avverbio 'laggiù' a quale categoria appartiene?",
+      "answers": [
+        "Avverbio di quantità",
+        "Avverbio di dubbio",
+        "Avverbio di luogo",
+        "Avverbio di modo"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "type": "multiple-choice",
+      "question": "L'avverbio 'abbastanza' che tipo di avverbio è?",
+      "answers": [
+        "Di quantità",
+        "Di modo",
+        "Di affermazione",
+        "Di tempo"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "L'avverbio 'davvero' è un avverbio di valutazione che esprime:",
+      "answers": [
+        "Negazione",
+        "Dubbio",
+        "Quantità",
+        "Affermazione"
+      ],
+      "correctAnswer": 3
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Quale dei seguenti è un avverbio di valutazione che esprime negazione?",
+      "answers": [
+        "Forse",
+        "Sì",
+        "Neppure",
+        "Proprio"
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "type": "multiple-choice",
+      "question": "L'avverbio 'probabilmente' è un avverbio di valutazione che esprime:",
+      "answers": [
+        "Dubbio",
+        "Negazione",
+        "Affermazione",
+        "Causa"
+      ],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Nella frase 'Perché non mi hai telefonato?', la parola 'Perché' è un avverbio:",
+      "answers": [
+        "Di modo",
+        "Interrogativo (di causa)",
+        "Di valutazione",
+        "Di luogo"
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Qual è il superlativo assoluto dell'avverbio 'bene'?",
+      "answers": [
+        "Meglio",
+        "Buonissimo",
+        "Benissimo (o ottimamente)",
+        "Più bene"
+      ],
+      "correctAnswer": 2
+    }
+  ]
+}
