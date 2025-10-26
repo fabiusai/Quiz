@@ -1,5 +1,11 @@
 [
   {
+    "id": "quiz_1761475804076",
+    "title": "Quiz sugli avverbi",
+    "description": "Testa la tua conoscenza degli avverbi nella grammatica italiana.",
+    "path": "repo/quiz_avverbi.json"
+  },
+  {
     "id": "grammatica01",
     "title": "La Coniugazione del Verbo",
     "description": "Verifica le tue conoscenze sul verbo e sulla sua coniugazione!",
