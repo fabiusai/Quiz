@@ -1,0 +1,162 @@
+{
+  "title": "Quiz: Le Proposizioni Subordinate",
+  "subtitle": "Analisi del periodo per la terza media",
+  "image": null,
+  "questions": [
+    {
+      "type": "true-false",
+      "question": "Una proposizione subordinata può esistere da sola e avere un senso compiuto.",
+      "answers": ["Vero", "Falso"],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Come si chiama la proposizione da cui dipende la subordinata?",
+      "answers": ["Dipendente", "Reggente", "Relativa", "Secondaria"],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Nella frase \"Penso *che tu abbia ragione*\", che tipo di proposizione è \"che tu abbia ragione\"?",
+      "answers": ["Soggettiva", "Oggettiva", "Finale", "Causale"],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Nella frase \"È necessario *che tu venga*\", che tipo di proposizione è \"che tu venga\"?",
+      "answers": ["Oggettiva", "Dichiarativa", "Soggettiva", "Interrogativa indiretta"],
+      "correctAnswer": 2
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Quale delle seguenti è una proposizione finale?",
+      "answers": [
+        "Poiché sono stanco, vado a dormire.",
+        "Studio molto per essere promosso.",
+        "Sono così stanco che dormo.",
+        "Se studi, sei promosso."
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "type": "true-false",
+      "question": "Le proposizioni causali indicano il motivo o la causa di quanto espresso nella reggente.",
+      "answers": ["Vero", "Falso"],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "\"Non so *se verrò alla festa*\". La proposizione evidenziata è:",
+      "answers": ["Oggettiva", "Soggettiva", "Interrogativa indiretta", "Dichiarativa"],
+      "correctAnswer": 2
+    },
+    {
+      "type": "multiple-choice",
+      "question": "\"L'uomo *che hai visto* è mio zio\". Che tipo di proposizione è \"che hai visto\"?",
+      "answers": ["Relativa", "Oggettiva", "Soggettiva", "Temporale"],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "\"Quando piove, resto a casa\". \"Quando piove\" è una proposizione:",
+      "answers": ["Temporale", "Causale", "Modale", "Consecutiva"],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "\"Ho talmente sonno *che non riesco a stare in piedi*\". La proposizione evidenziata è:",
+      "answers": ["Causale", "Finale", "Consecutiva", "Comparativa"],
+      "correctAnswer": 2
+    },
+    {
+      "type": "true-false",
+      "question": "La proposizione concessiva indica una condizione da cui dipende l'avverarsi della reggente.",
+      "answers": ["Vero", "Falso"],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "\"Sebbene sia stanco, continuo a lavorare\". \"Sebbene sia stanco\" è una proposizione:",
+      "answers": ["Avversativa", "Condizionale", "Concessiva", "Esclusiva"],
+      "correctAnswer": 2
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Nella frase \"Questo mi piace: *che tu sia sincero*\", la proposizione \"che tu sia sincero\" è:",
+      "answers": ["Oggettiva", "Soggettiva", "Dichiarativa", "Relativa"],
+      "correctAnswer": 2
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Quale congiunzione introduce tipicamente una proposizione causale?",
+      "answers": ["Affinché", "Sebbene", "Poiché", "Quando"],
+      "correctAnswer": 2
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Quale congiunzione introduce tipicamente una proposizione finale?",
+      "answers": ["Perché (come 'poiché')", "Affinché", "Benché", "Mentre"],
+      "correctAnswer": 1
+    },
+    {
+      "type": "true-false",
+      "question": "Le proposizioni soggettive fanno da soggetto al predicato della reggente.",
+      "answers": ["Vero", "Falso"],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "\"Se avessi studiato, avresti superato l'esame\". \"Se avessi studiato\" è una proposizione:",
+      "answers": ["Temporale", "Condizionale", "Concessiva", "Causale"],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "\"Mangio *come mi hai insegnato tu*\". La proposizione evidenziata è:",
+      "answers": ["Comparativa", "Relativa", "Modale", "Strumentale"],
+      "correctAnswer": 2
+    },
+    {
+      "type": "multiple-choice",
+      "question": "\"Sono più alto *di quanto tu creda*\". Questa è una proposizione:",
+      "answers": ["Comparativa", "Consecutiva", "Oggettiva", "Limitativa"],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "\"Ti prego *di non fare tardi*\". La proposizione \"di non fare tardi\" è:",
+      "answers": ["Soggettiva", "Oggettiva", "Interrogativa indiretta", "Finale"],
+      "correctAnswer": 1
+    },
+    {
+      "type": "true-false",
+      "question": "Le proposizioni relative sono introdotte solo da pronomi come 'che', 'cui', 'il quale'.",
+      "answers": ["Vero", "Falso"],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "\"Uscì *senza che nessuno lo vedesse*\". Questa è una proposizione:",
+      "answers": ["Modale", "Eccettuativa", "Avversativa", "Temporale"],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "\"Ti do questo libro *perché tu possa studiare*\". \"perché tu possa studiare\" è una:",
+      "answers": ["Causale", "Finale", "Consecutiva", "Condizionale"],
+      "correctAnswer": 1
+    },
+    {
+      "type": "multiple-choice",
+      "question": "Se trasformi il complemento \"*secondo le tue istruzioni*\" in una proposizione, quale tipo ottieni?",
+      "answers": ["Modale", "Causale", "Concessiva", "Finale"],
+      "correctAnswer": 0
+    },
+    {
+      "type": "multiple-choice",
+      "question": "\"Bisogna *che tu parta*\". La proposizione \"che tu parta\" è:",
+      "answers": ["Oggettiva", "Dichiarativa", "Interrogativa indiretta", "Soggettiva"],
+      "correctAnswer": 3
+    }
+  ]
+}
