@@ -1,5 +1,11 @@
 [
   {
+    "id": "quiz_1771799889989",
+    "title": "Occhio all'errore",
+    "description": "Ortografia",
+    "path": "repo/quiz_di_ortografia.json"
+  },
+  {
     "id": "quiz_1762106302620",
     "title": "La proposizione subordinata",
     "description": "Analisi del periodo per la terza media",
