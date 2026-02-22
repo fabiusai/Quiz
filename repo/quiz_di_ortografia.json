@@ -1,0 +1,321 @@
+{
+  "title": "Quiz di Ortografia",
+  "subtitle": "Testa le tue conoscenze sulle regole ortografiche della lingua italiana (Prima Media)",
+  "image": null,
+  "questions": [
+    {
+      "question": "Quale di queste frasi contiene un errore ortografico?",
+      "type": "multiple-choice",
+      "correctAnswer": 3,
+      "answers": [
+        "Vengo da te",
+        "Lui mi dà un libro",
+        "Non so se venire",
+        "Vado li"
+      ]
+    },
+    {
+      "question": "Indica la forma corretta:",
+      "type": "multiple-choice",
+      "correctAnswer": 1,
+      "answers": [
+        "un'albero",
+        "un albero",
+        "uno albero",
+        "un'alberò"
+      ]
+    },
+    {
+      "question": "Qual è la scrittura corretta?",
+      "type": "multiple-choice",
+      "correctAnswer": 1,
+      "answers": [
+        "Qual'è",
+        "Qual è",
+        "Quale è",
+        "Qual'e"
+      ]
+    },
+    {
+      "question": "Quale di queste parole con doppie è scritta in modo corretto?",
+      "type": "multiple-choice",
+      "correctAnswer": 1,
+      "answers": [
+        "Accellerare",
+        "Accelerare",
+        "Accelare",
+        "Accellerrare"
+      ]
+    },
+    {
+      "question": "La parola 'scienza' si scrive con la 'i'.",
+      "type": "true-false",
+      "correctAnswer": 0,
+      "answers": [
+        "Vero",
+        "Falso"
+      ]
+    },
+    {
+      "question": "Quale parola richiede l'accento acuto sulla vocale finale?",
+      "type": "multiple-choice",
+      "correctAnswer": 1,
+      "answers": [
+        "Caffè",
+        "Perché",
+        "Città",
+        "Virtù"
+      ]
+    },
+    {
+      "question": "Davanti alle consonanti 'p' e 'b' si usa sempre la lettera 'n'.",
+      "type": "true-false",
+      "correctAnswer": 1,
+      "answers": [
+        "Vero",
+        "Falso"
+      ]
+    },
+    {
+      "question": "Il plurale corretto di 'camicia' è:",
+      "type": "multiple-choice",
+      "correctAnswer": 1,
+      "answers": [
+        "camice",
+        "camicie",
+        "camiccie",
+        "camici"
+      ]
+    },
+    {
+      "question": "Qual è la corretta divisione in sillabe della parola 'acqua'?",
+      "type": "multiple-choice",
+      "correctAnswer": 1,
+      "answers": [
+        "a-cqua",
+        "ac-qua",
+        "acq-ua",
+        "a-cq-ua"
+      ]
+    },
+    {
+      "question": "Quale di queste parole con i suoni 'ni' o 'gn' è scritta correttamente?",
+      "type": "multiple-choice",
+      "correctAnswer": 3,
+      "answers": [
+        "Colognia",
+        "Ingenio",
+        "Ingegniere",
+        "Compagnia"
+      ]
+    },
+    {
+      "question": "Qual è l'unica parola in italiano che si scrive con 'qqu'?",
+      "type": "multiple-choice",
+      "correctAnswer": 0,
+      "answers": [
+        "Soqquadro",
+        "Taqquino",
+        "Aqqua",
+        "Aqquisto"
+      ]
+    },
+    {
+      "question": "Il monosillabo 'se' vuole l'accento quando ha funzione di pronome personale (es. 'pensava solo a sé').",
+      "type": "true-false",
+      "correctAnswer": 0,
+      "answers": [
+        "Vero",
+        "Falso"
+      ]
+    },
+    {
+      "question": "Si scrive 'un'amica' con l'apostrofo perché avviene un'elisione.",
+      "type": "true-false",
+      "correctAnswer": 0,
+      "answers": [
+        "Vero",
+        "Falso"
+      ]
+    },
+    {
+      "question": "Quale espressione contiene un troncamento e non un'elisione?",
+      "type": "multiple-choice",
+      "correctAnswer": 2,
+      "answers": [
+        "All'aperto",
+        "Un'oca",
+        "Buon appetito",
+        "L'albero"
+      ]
+    },
+    {
+      "question": "Identifica la parola scritta in modo ERRATO:",
+      "type": "multiple-choice",
+      "correctAnswer": 3,
+      "answers": [
+        "Taccuino",
+        "Obiettivo",
+        "Avvallare",
+        "Sopratutto"
+      ]
+    },
+    {
+      "question": "Quale di queste parole con 'sce' o 'scie' è scritta in modo ERRATO?",
+      "type": "multiple-choice",
+      "correctAnswer": 3,
+      "answers": [
+        "Coscienza",
+        "Conoscenza",
+        "Usciere",
+        "Scenza"
+      ]
+    },
+    {
+      "question": "La parola 'caffè' richiede l'accento grave.",
+      "type": "true-false",
+      "correctAnswer": 0,
+      "answers": [
+        "Vero",
+        "Falso"
+      ]
+    },
+    {
+      "question": "Quale parola è scritta correttamente rispettando la regola di 'm' davanti a 'p' e 'b'?",
+      "type": "multiple-choice",
+      "correctAnswer": 1,
+      "answers": [
+        "Inpossibile",
+        "Imbranato",
+        "Canbiare",
+        "Inbuto"
+      ]
+    },
+    {
+      "question": "Qual è il plurale corretto di 'spiaggia'?",
+      "type": "multiple-choice",
+      "correctAnswer": 1,
+      "answers": [
+        "spiaggie",
+        "spiagge",
+        "spiaggi",
+        "spiagia"
+      ]
+    },
+    {
+      "question": "Come si divide correttamente in sillabe la parola 'castello'?",
+      "type": "multiple-choice",
+      "correctAnswer": 2,
+      "answers": [
+        "ca-ste-llo",
+        "cas-tel-lo",
+        "ca-stel-lo",
+        "cas-te-llo"
+      ]
+    },
+    {
+      "question": "Quale parola è scritta in modo ERRATO?",
+      "type": "multiple-choice",
+      "correctAnswer": 3,
+      "answers": [
+        "Niente",
+        "Ognuno",
+        "Sogniamo",
+        "Ingnorante"
+      ]
+    },
+    {
+      "question": "Quale di queste parole si scrive con 'cu' e non con 'qu'?",
+      "type": "multiple-choice",
+      "correctAnswer": 3,
+      "answers": [
+        "Cuoco",
+        "Scuola",
+        "Cuore",
+        "Tutte le precedenti"
+      ]
+    },
+    {
+      "question": "La parola 'acquistare' si scrive con 'cq'.",
+      "type": "true-false",
+      "correctAnswer": 0,
+      "answers": [
+        "Vero",
+        "Falso"
+      ]
+    },
+    {
+      "question": "Quale di queste parole cambia completamente significato a seconda di dove cade l'accento tonico?",
+      "type": "multiple-choice",
+      "correctAnswer": 0,
+      "answers": [
+        "Ancora",
+        "Casa",
+        "Libro",
+        "Treno"
+      ]
+    },
+    {
+      "question": "Indica la frase scritta correttamente riguardo i monosillabi:",
+      "type": "multiple-choice",
+      "correctAnswer": 0,
+      "answers": [
+        "Non lo so.",
+        "Non lo sò.",
+        "Non lo so'.",
+        "Non l'ho so."
+      ]
+    },
+    {
+      "question": "Il plurale di 'valigia' è:",
+      "type": "multiple-choice",
+      "correctAnswer": 1,
+      "answers": [
+        "valige",
+        "valigie",
+        "valiggie",
+        "valigi"
+      ]
+    },
+    {
+      "question": "La parola 'caramella' è scritta in modo corretto, raddoppiando la lettera 'l'.",
+      "type": "true-false",
+      "correctAnswer": 0,
+      "answers": [
+        "Vero",
+        "Falso"
+      ]
+    },
+    {
+      "question": "Quale di queste parole NON vuole la vocale 'i'?",
+      "type": "multiple-choice",
+      "correctAnswer": 3,
+      "answers": [
+        "Scienza",
+        "Coscienza",
+        "Fantascienza",
+        "Beneficenza"
+      ]
+    },
+    {
+      "question": "La divisione in sillabe 'te-at-ro' è corretta.",
+      "type": "true-false",
+      "correctAnswer": 1,
+      "answers": [
+        "Vero",
+        "Falso"
+      ]
+    },
+    {
+      "question": "Trova l'errore ortografico tra queste parole:",
+      "type": "multiple-choice",
+      "correctAnswer": 3,
+      "answers": [
+        "Bambino",
+        "Lampada",
+        "Pompiere",
+        "Conbaciare"
+      ]
+    }
+  ]
+}
