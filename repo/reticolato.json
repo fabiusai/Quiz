@@ -1,270 +1,266 @@
 {
-  "title": "Cosa è la Geografia",
-  "subtitle": "Introduzione e Orientamento",
-  "image": null,
-  "questions": [
-    {
-      "type": "multiple-choice",
-      "question": "Da quale lingua antica deriva la parola 'Geografia'?",
-      "answers": [
-        "Latino",
-        "Egizio",
-        "Greco antico",
-        "Arabo"
-      ],
-      "correctAnswer": 2
-    },
-    {
-      "type": "multiple-choice",
-      "question": "Cosa significa la parola 'Geo'?",
-      "answers": [
-        "Acqua",
-        "Terra",
-        "Cielo",
-        "Fuoco"
-      ],
-      "correctAnswer": 1
-    },
-    {
-      "type": "multiple-choice",
-      "question": "Cosa significa la parola 'Grafia'?",
-      "answers": [
-        "Disegno o Pittura",
-        "Scrittura o Descrizione",
-        "Calcolo o Misura",
-        "Scienza o Studio"
-      ],
-      "correctAnswer": 1
-    },
-    {
-      "type": "multiple-choice",
-      "question": "Secondo la definizione del testo, che cosa studia e analizza principalmente la geografia?",
-      "answers": [
-        "Esclusivamente gli elementi naturali",
-        "Il rapporto e le relazioni tra l'uomo e l'ambiente",
-        "Il movimento dei pianeti",
-        "La composizione delle rocce nel sottosuolo"
-      ],
-      "correctAnswer": 1
-    },
-    {
-      "type": "true-false",
-      "question": "Il geografo osserva il territorio come un detective e distingue due tipi di elementi.",
-      "answers": [
-        "Vero",
-        "Falso"
-      ],
-      "correctAnswer": 0
-    },
-    {
-      "type": "multiple-choice",
-      "question": "Quali sono i due tipi di elementi distinti dal geografo nel paesaggio?",
-      "answers": [
-        "Animali e vegetali",
-        "Terrestri e marini",
-        "Fisici e Antropici",
-        "Antichi e moderni"
-      ],
-      "correctAnswer": 2
-    },
-    {
-      "type": "multiple-choice",
-      "question": "Come vengono anche chiamati gli elementi fisici?",
-      "answers": [
-        "Umani",
-        "Artificiali",
-        "Naturali",
-        "Spaziali"
-      ],
-      "correctAnswer": 2
-    },
-    {
-      "type": "true-false",
-      "question": "Le strade, i ponti e le industrie sono elementi fisici.",
-      "answers": [
-        "Vero",
-        "Falso"
-      ],
-      "correctAnswer": 1
-    },
-    {
-      "type": "multiple-choice",
-      "question": "Quale tra i seguenti è un esempio di elemento antropico?",
-      "answers": [
-        "Montagna",
-        "Fiume",
-        "Isola",
-        "Campo coltivato"
-      ],
-      "correctAnswer": 3
-    },
-    {
-      "type": "multiple-choice",
-      "question": "Quale tra i seguenti è un esempio di elemento fisico?",
-      "answers": [
-        "Città",
-        "Vulcano",
-        "Strada",
-        "Ponte"
-      ],
-      "correctAnswer": 1
-    },
-    {
-      "type": "multiple-choice",
-      "question": "Cosa significa letteralmente la parola 'Orientarsi'?",
-      "answers": [
-        "Trovare l'Oriente",
-        "Usare la bussola",
-        "Andare a Nord",
-        "Guardare le stelle"
-      ],
-      "correctAnswer": 0
-    },
-    {
-      "type": "true-false",
-      "question": "Il Sole si muove effettivamente nel cielo spostandosi da est a ovest.",
-      "answers": [
-        "Vero",
-        "Falso"
-      ],
-      "correctAnswer": 1
-    },
-    {
-      "type": "multiple-choice",
-      "question": "Perché ci sembra che il Sole si sposti nel cielo?",
-      "answers": [
-        "Perché il Sole gira intorno alla Terra",
-        "A causa della rotazione della Terra",
-        "Per le correnti atmosferiche",
-        "A causa delle nuvole"
-      ],
-      "correctAnswer": 1
-    },
-    {
-      "type": "multiple-choice",
-      "question": "Quale punto cardinale indica il punto in cui sorge il Sole al mattino?",
-      "answers": [
-        "Nord",
-        "Sud",
-        "Est",
-        "Ovest"
-      ],
-      "correctAnswer": 2
-    },
-    {
-      "type": "multiple-choice",
-      "question": "Quale punto cardinale indica il punto in cui il Sole tramonta alla sera?",
-      "answers": [
-        "Est",
-        "Ovest",
-        "Nord",
-        "Sud"
-      ],
-      "correctAnswer": 1
-    },
-    {
-      "type": "true-false",
-      "question": "Il Sole raggiunge la sua massima altezza nel cielo a metà giornata in corrispondenza del Sud.",
-      "answers": [
-        "Vero",
-        "Falso"
-      ],
-      "correctAnswer": 0
-    },
-    {
-      "type": "multiple-choice",
-      "question": "In quale punto cardinale il Sole non passa mai direttamente?",
-      "answers": [
-        "Nord",
-        "Sud",
-        "Est",
-        "Ovest"
-      ],
-      "correctAnswer": 0
-    },
-    {
-      "type": "multiple-choice",
-      "question": "Come si può trovare facilmente il Nord di notte?",
-      "answers": [
-        "Guardando la Luna",
-        "Cercando la Stella Polare nel cielo",
-        "Osservando la forma delle nuvole",
-        "Usando un orologio a lancette"
-      ],
-      "correctAnswer": 1
-    },
-    {
-      "type": "multiple-choice",
-      "question": "Quale tra questi è un sinonimo corretto per l'Est?",
-      "answers": [
-        "Ponente",
-        "Occidente",
-        "Levante",
-        "Meridione"
-      ],
-      "correctAnswer": 2
-    },
-    {
-      "type": "multiple-choice",
-      "question": "Perché l'Ovest è anche chiamato 'Ponente'?",
-      "answers": [
-        "Perché indica la posizione del Sole a metà giornata",
-        "Perché il Sole 'si pone', cioè scende",
-        "Perché il Sole 'si leva' nel cielo",
-        "Perché è il punto opposto al Sud"
-      ],
-      "correctAnswer": 1
-    },
-    {
-      "type": "true-false",
-      "question": "Il termine 'Mezzogiorno' è un sinonimo del punto cardinale Sud.",
-      "answers": [
-        "Vero",
-        "Falso"
-      ],
-      "correctAnswer": 0
-    },
-    {
-      "type": "multiple-choice",
-      "question": "Quali sono i sinonimi del punto cardinale Nord?",
-      "answers": [
-        "Levante o Oriente",
-        "Ponente o Occidente",
-        "Meridione o Mezzogiorno",
-        "Settentrione o Mezzanotte"
-      ],
-      "correctAnswer": 3
-    },
-    {
-      "type": "multiple-choice",
-      "question": "Applicando il metodo del corpo umano, se ti trovi all'aperto a Mezzogiorno e guardi verso il Sole, quale punto cardinale si trova esattamente dietro le tue spalle?",
-      "answers": [
-        "Sud",
-        "Nord",
-        "Est",
-        "Ovest"
-      ],
-      "correctAnswer": 1
-    },
-    {
-      "type": "true-false",
-      "question": "Se guardo il Sole a mezzogiorno, l'Ovest si trova alla mia destra.",
-      "answers": [
-        "Vero",
-        "Falso"
-      ],
-      "correctAnswer": 0
-    },
-    {
-      "type": "multiple-choice",
-      "question": "Quale strumento moderno è dotato di un ago magnetizzato che punta sempre verso il Nord magnetico?",
-      "answers": [
-        "Il GPS",
-        "La Bussola",
-        "La Carta Geografica",
-        "Il Radar"
-      ],
-      "correctAnswer": 1
-    }
-  ]
+"title": "Il Reticolato Geografico",
+"subtitle": "Mettiti alla prova su paralleli, meridiani e coordinate!",
+"image": null,
+"questions": [
+{
+"type": "multiple-choice",
+"question": "Che cos'è il reticolato geografico?",
+"answers": [
+"Una rete da pesca molto grande",
+"Una griglia invisibile disegnata sulla Terra",
+"Un insieme di strade e autostrade",
+"Un sistema di fiumi sotterranei"
+],
+"correctAnswer": 1
+},
+{
+"type": "true-false",
+"question": "Il reticolato geografico funziona in modo simile al gioco della Battaglia Navale.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "Cosa sono i paralleli?",
+"answers": [
+"Linee immaginarie verticali",
+"Linee curve che uniscono le montagne",
+"Cerchi immaginari orizzontali che circondano la Terra",
+"Raggi di luce che partono dal Sole"
+],
+"correctAnswer": 2
+},
+{
+"type": "multiple-choice",
+"question": "Qual è il parallelo più importante?",
+"answers": [
+"Il Meridiano di Greenwich",
+"L'Equatore",
+"Il Polo Nord",
+"Il Tropico"
+],
+"correctAnswer": 1
+},
+{
+"type": "true-false",
+"question": "L'Equatore corrisponde al grado 0°.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "Come si chiama la parte di Terra che si trova a Nord dell'Equatore?",
+"answers": [
+"Emisfero Australe",
+"Emisfero Occidentale",
+"Emisfero Boreale",
+"Emisfero Orientale"
+],
+"correctAnswer": 2
+},
+{
+"type": "multiple-choice",
+"question": "Come si chiama l'emisfero che si trova a Sud (in basso) rispetto all'Equatore?",
+"answers": [
+"Emisfero Australe",
+"Emisfero Boreale",
+"Polo Sud",
+"Emisfero Equatoriale"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "Quanti sono i paralleli in tutto?",
+"answers": [
+"360",
+"90",
+"180",
+"100"
+],
+"correctAnswer": 2
+},
+{
+"type": "true-false",
+"question": "Ci sono 90 paralleli a Nord dell'Equatore e 90 a Sud.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "Che cos'è la latitudine?",
+"answers": [
+"La distanza di un punto dall'Equatore",
+"La distanza di un punto dal Polo Nord",
+"La distanza di un punto dal Meridiano di Greenwich",
+"L'altezza di una montagna"
+],
+"correctAnswer": 0
+},
+{
+"type": "true-false",
+"question": "La latitudine può essere Est o Ovest.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Cosa sono i meridiani?",
+"answers": [
+"Cerchi orizzontali",
+"Linee immaginarie verticali che uniscono il Polo Nord al Polo Sud",
+"Fiumi che attraversano i continenti",
+"Confini tra le nazioni"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "A cosa vengono paragonati i meridiani nel testo per spiegarne la forma?",
+"answers": [
+"A una ragnatela",
+"Agli spicchi di un'arancia",
+"Ai raggi di una ruota",
+"A fette di torta"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Qual è il meridiano più importante?",
+"answers": [
+"Il Meridiano dell'Equatore",
+"Il Meridiano di Roma",
+"Il Meridiano di Greenwich",
+"Il Meridiano di Parigi"
+],
+"correctAnswer": 2
+},
+{
+"type": "multiple-choice",
+"question": "Vicino a quale città passa il meridiano 0°?",
+"answers": [
+"Roma",
+"Parigi",
+"New York",
+"Londra"
+],
+"correctAnswer": 3
+},
+{
+"type": "true-false",
+"question": "Il Meridiano di Greenwich divide la Terra in Est (a destra) e Ovest (a sinistra).",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "Quanti sono i meridiani in totale?",
+"answers": [
+"180",
+"90",
+"360",
+"400"
+],
+"correctAnswer": 2
+},
+{
+"type": "multiple-choice",
+"question": "Quanti meridiani si trovano a Ovest del Meridiano di Greenwich?",
+"answers": [
+"180",
+"360",
+"90",
+"100"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "Che cos'è la longitudine?",
+"answers": [
+"La distanza di un punto dall'Equatore",
+"La distanza di un punto dal Meridiano di Greenwich",
+"La distanza tra i due poli",
+"La misura dell'Equatore"
+],
+"correctAnswer": 1
+},
+{
+"type": "true-false",
+"question": "La longitudine può essere Nord o Sud.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Cosa formano un parallelo e un meridiano quando si incrociano?",
+"answers": [
+"Un nuovo emisfero",
+"Una linea diagonale",
+"Un punto preciso, ovvero le coordinate geografiche",
+"Un oceano"
+],
+"correctAnswer": 2
+},
+{
+"type": "multiple-choice",
+"question": "Quali strumenti moderni utilizzano oggi le coordinate geografiche?",
+"answers": [
+"Solo i libri di geografia",
+"Gli smartphone e i sistemi GPS",
+"Solo le navi militari",
+"Le bussole antiche"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Quando si scrivono le coordinate geografiche, quale dato si inserisce per primo nella formula?",
+"answers": [
+"La Longitudine",
+"L'Altitudine",
+"La Latitudine",
+"L'Emisfero"
+],
+"correctAnswer": 2
+},
+{
+"type": "true-false",
+"question": "Le coordinate geografiche di Roma sono (42° N, 12° E).",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 0
+},
+{
+"type": "true-false",
+"question": "Secondo le regole di latitudine e longitudine, è possibile trovare un punto che si trova a 110° di Latitudine Nord.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 1
+}
+]
 }
