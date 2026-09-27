@@ -1,45 +1,264 @@
-Sei un assistente AI specializzato nella creazione di contenuti didattici. Il tuo compito è generare un quiz in formato JSON basato sulle seguenti specifiche. Il JSON deve essere perfettamente formattato per essere importato direttamente in un'applicazione, senza alcun testo o commento aggiuntivo al di fuori del codice JSON.
-
-### Contesto del Quiz
-* **Argomento:** La linea del tempo
-* **Materia:** Storia
-* **Classe:** Prima Media
-
-### Struttura del Quiz
-* **Numero Totale Domande:** 25
-* **Distribuzione Domande:** Sarà l'AI a decidere la distribuzione ottimale.
-
-### Fonti da Utilizzare
-* **Utilizza Ricerca Web:** No
-* **Considera file esterni (forniti in seguito):** Sì
-
-### Formato JSON Richiesto
-Crea un singolo oggetto JSON con le seguenti chiavi:
-1.  **title**: (stringa) Il titolo del quiz, basato sull'argomento.
-2.  **subtitle**: (stringa) Un sottotitolo appropriato per il quiz.
-3.  **image**: (stringa) Lascia questo campo come 'null'.
-4.  **questions**: (array di oggetti) Un array contenente tutte le domande.
-
-Ogni oggetto domanda nell'array "questions" deve avere la seguente struttura:
-* **type**: (stringa) Deve essere "multiple-choice" o "true-false".
-* **question**: (stringa) Il testo della domanda.
-* **answers**: (array di stringhe). Per "multiple-choice", deve contenere 4 opzioni. Per "true-false", deve contenere esattamente ["Vero", "Falso"].
-* **correctAnswer**: (numero) L'indice (a partire da 0) della risposta corretta nell'array "answers".
-
-### Esempio Domanda Risposta Multipla:
 {
-  "type": "multiple-choice",
-  "question": "Chi era il re di Francia durante la Rivoluzione Francese?",
-  "answers": ["Napoleone Bonaparte", "Luigi XVI", "Robespierre", "Luigi XIV"],
-  "correctAnswer": 1
-}
-
-### Esempio Domanda Vero/Falso:
+"title": "La linea del tempo e i secoli",
+"subtitle": "Verifica le tue conoscenze su anni, secoli e numeri romani",
+"image": null,
+"questions": [
 {
-  "type": "true-false",
-  "question": "La presa della Bastiglia avvenne nel 1789.",
-  "answers": ["Vero", "Falso"],
-  "correctAnswer": 0
+"type": "true-false",
+"question": "Una linea del tempo indica il passaggio del tempo spostandosi da destra verso sinistra.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Cosa rappresenta l'anno 0 nella linea del tempo?",
+"answers": [
+"La nascita di Gesù Cristo",
+"La fine dell'Impero Romano",
+"La nascita del mondo",
+"L'invenzione della scrittura"
+],
+"correctAnswer": 0
+},
+{
+"type": "true-false",
+"question": "Gli anni a.C. (Avanti Cristo) si contano all'indietro.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "Cosa significa la sigla d.C.?",
+"answers": [
+"Dopo Cristo",
+"Durante Cristo",
+"Data Certa",
+"Dopo Cent'anni"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "Quanti anni ci sono in un secolo?",
+"answers": [
+"10",
+"100",
+"1000",
+"50"
+],
+"correctAnswer": 1
+},
+{
+"type": "true-false",
+"question": "In storia, gli anni si scrivono generalmente usando i numeri romani.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Con quali numeri si indicano i secoli in storia?",
+"answers": [
+"Numeri arabi",
+"Numeri romani",
+"Lettere minuscole",
+"Numeri decimali"
+],
+"correctAnswer": 1
+},
+{
+"type": "true-false",
+"question": "Un secolo comincia sempre con l'anno 0 e finisce con l'anno 99.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "L'anno 800 di quale secolo è l'ultimo anno?",
+"answers": [
+"VII secolo",
+"VIII secolo",
+"IX secolo",
+"X secolo"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "In che secolo si trova l'anno 801?",
+"answers": [
+"VIII secolo",
+"IX secolo",
+"VII secolo",
+"X secolo"
+],
+"correctAnswer": 1
+},
+{
+"type": "true-false",
+"question": "A partire dal XIII secolo, in Italia possiamo usare la cifra araba con l'apostrofo (es. il '200) per indicare il secolo.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "A quale secolo in numeri romani corrisponde il Duecento (o '200)?",
+"answers": [
+"XII secolo",
+"XIII secolo",
+"XIV secolo",
+"XV secolo"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "L'intervallo di anni dal 1301 al 1400 corrisponde a:",
+"answers": [
+"Il Trecento",
+"Il Duecento",
+"Il Quattrocento",
+"Il Cinquecento"
+],
+"correctAnswer": 0
+},
+{
+"type": "true-false",
+"question": "L'anno 1492 appartiene al XV secolo.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "Quale di questi anni si trova nel XX secolo (il Novecento)?",
+"answers": [
+"1899",
+"1969",
+"2005",
+"1850"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "A quale numero arabo corrisponde il numero romano XIV?",
+"answers": [
+"14",
+"16",
+"12",
+"15"
+],
+"correctAnswer": 0
+},
+{
+"type": "true-false",
+"question": "L'anno 476 appartiene al IV secolo.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Quale numero romano indica il secolo degli anni dal 2001 al 2100?",
+"answers": [
+"XX",
+"XIX",
+"XXI",
+"XXII"
+],
+"correctAnswer": 2
+},
+{
+"type": "multiple-choice",
+"question": "L'anno 1215 a quale secolo appartiene?",
+"answers": [
+"XII secolo",
+"XIII secolo",
+"XI secolo",
+"XIV secolo"
+],
+"correctAnswer": 1
+},
+{
+"type": "true-false",
+"question": "Per gli anni prima del 1200 non usiamo nomi come 'il Cento' o 'il Duecento'.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "A quale secolo corrisponde il '700?",
+"answers": [
+"XVI secolo",
+"XVII secolo",
+"XVIII secolo",
+"XIX secolo"
+],
+"correctAnswer": 2
+},
+{
+"type": "multiple-choice",
+"question": "Se leggi 'l'Ottocento', a quale secolo in numeri romani ci si riferisce?",
+"answers": [
+"XVII secolo",
+"XVIII secolo",
+"XIX secolo",
+"XX secolo"
+],
+"correctAnswer": 2
+},
+{
+"type": "true-false",
+"question": "L'anno 1300 fa parte del Trecento (XIV secolo).",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Quale di questi abbinamenti è CORRETTO?",
+"answers": [
+"Anno 750 = VII secolo",
+"Anno 1450 = XV secolo",
+"Il '400 = XIV secolo",
+"L'anno 2001 = XX secolo"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Quale di questi anni NON fa parte del XV secolo?",
+"answers": [
+"1401",
+"1453",
+"1492",
+"1501"
+],
+"correctAnswer": 3
 }
-
-Ora, genera il quiz completo in formato JSON seguendo rigorosamente tutte le istruzioni.
+]
+}
