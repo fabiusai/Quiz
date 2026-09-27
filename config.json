@@ -6,6 +6,12 @@
     "path": "repo/linea_tempo.json"
   },
   {
+    "id": "quiz_1790530611826",
+    "title": "Cosa è la Geografia",
+    "description": "Che cosa significa \"Geografia\" e che cosa analizza",
+    "path": "repo/geografia_intro.json"
+  },
+  {
     "id": "quiz_1790530121958",
     "title": "Cosa è la mitologia",
     "description": "La parola mito deriva dal greco mýthos, che significa \"racconto\".",
