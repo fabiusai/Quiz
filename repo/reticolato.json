@@ -1,74 +1,270 @@
-[
-  {
-    "id": "quiz_1790528525557",
-    "title": "La linea del tempo",
-    "description": "Una linea del tempo è una linea retta con una freccia che si muove da sinistra verso destra, indicando il passaggio del tempo dal passato al futuro.",
-    "path": "repo/linea_tempo.json"
-  },
-  {
-    "id": "quiz_1790530611826",
-    "title": "Cosa è la Geografia",
-    "description": "Che cosa significa \"Geografia\" e che cosa analizza",
-    "path": "repo/geografia_intro.json"
-  },
-  {
-    "id": "quiz_1790532041963",
-    "title": "Il reticolato geografico",
-    "description": "Per trovare un punto esatto (come una citta o una nave in mezzo al mare), i geografi hanno disegnato sulla Terra una griglia invisibile.",
-    "path": "repo/reticolato.json"
-  },
-  {
-    "id": "quiz_1790530121958",
-    "title": "Cosa è la mitologia",
-    "description": "La parola mito deriva dal greco mýthos, che significa \"racconto\".",
-    "path": "repo/mitologia.json"
-  },
-  {
-    "id": "quiz_1771799889989",
-    "title": "Occhio all'errore",
-    "description": "Ortografia",
-    "path": "repo/quiz_di_ortografia.json"
-  },
-  {
-    "id": "quiz_1762106302620",
-    "title": "La proposizione subordinata",
-    "description": "Analisi del periodo per la terza media",
-    "path": "repo/proposizione_subordinata.json"
-  },
-  {
-    "id": "quiz_1761475804076",
-    "title": "Quiz sugli avverbi",
-    "description": "Testa la tua conoscenza degli avverbi nella grammatica italiana.",
-    "path": "repo/quiz_avverbi.json"
-  },
-  {
-    "id": "grammatica01",
-    "title": "La Coniugazione del Verbo",
-    "description": "Verifica le tue conoscenze sul verbo e sulla sua coniugazione!",
-    "path": "repo/verbi_01.json"
-  },
-  {
-    "id": "quiz_1759943131008",
-    "title": "Ortografia italiana",
-    "description": "Metti alla prova le tue conoscenze sull'ortografia italiana",
-    "path": "repo/quiz_di_ortografia_italiana.json"
-  },
-  {
-    "id": "quiz_1759945733012",
-    "title": "Il Verbo: Radice, Desinenza e Coniugazioni",
-    "description": "Un quiz per testare le tue conoscenze sulla struttura del verbo e sui verbi essere e avere",
-    "path": "repo/essereavere.json"
-  },
-  {
-    "id": "quiz_1760804886635",
-    "title": "Il testo argomentativo",
-    "description": "Un quiz per conoscere meglio il testo argomentativo",
-    "path": "repo/il_testo_argomentativo.json"
-  },
-  {
-    "id": "quiz_1761119066884",
-    "title": "Analisi del Periodo",
-    "description": "Metti alla prova la tua conoscenza delle frasi complesse",
-    "path": "repo/analisi_del_periodo.json"
-  }
+{
+"title": "Cosa è la Geografia",
+"subtitle": "Introduzione e Orientamento",
+"image": null,
+"questions": [
+{
+"type": "multiple-choice",
+"question": "Da quale lingua antica deriva la parola 'Geografia'?",
+"answers": [
+"Latino",
+"Egizio",
+"Greco antico",
+"Arabo"
+],
+"correctAnswer": 2
+},
+{
+"type": "multiple-choice",
+"question": "Cosa significa la parola 'Geo'?",
+"answers": [
+"Acqua",
+"Terra",
+"Cielo",
+"Fuoco"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Cosa significa la parola 'Grafia'?",
+"answers": [
+"Disegno o Pittura",
+"Scrittura o Descrizione",
+"Calcolo o Misura",
+"Scienza o Studio"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Secondo la definizione del testo, che cosa studia e analizza principalmente la geografia?",
+"answers": [
+"Esclusivamente gli elementi naturali",
+"Il rapporto e le relazioni tra l'uomo e l'ambiente",
+"Il movimento dei pianeti",
+"La composizione delle rocce nel sottosuolo"
+],
+"correctAnswer": 1
+},
+{
+"type": "true-false",
+"question": "Il geografo osserva il territorio come un detective e distingue due tipi di elementi.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "Quali sono i due tipi di elementi distinti dal geografo nel paesaggio?",
+"answers": [
+"Animali e vegetali",
+"Terrestri e marini",
+"Fisici e Antropici",
+"Antichi e moderni"
+],
+"correctAnswer": 2
+},
+{
+"type": "multiple-choice",
+"question": "Come vengono anche chiamati gli elementi fisici?",
+"answers": [
+"Umani",
+"Artificiali",
+"Naturali",
+"Spaziali"
+],
+"correctAnswer": 2
+},
+{
+"type": "true-false",
+"question": "Le strade, i ponti e le industrie sono elementi fisici.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Quale tra i seguenti è un esempio di elemento antropico?",
+"answers": [
+"Montagna",
+"Fiume",
+"Isola",
+"Campo coltivato"
+],
+"correctAnswer": 3
+},
+{
+"type": "multiple-choice",
+"question": "Quale tra i seguenti è un esempio di elemento fisico?",
+"answers": [
+"Città",
+"Vulcano",
+"Strada",
+"Ponte"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Cosa significa letteralmente la parola 'Orientarsi'?",
+"answers": [
+"Trovare l'Oriente",
+"Usare la bussola",
+"Andare a Nord",
+"Guardare le stelle"
+],
+"correctAnswer": 0
+},
+{
+"type": "true-false",
+"question": "Il Sole si muove effettivamente nel cielo spostandosi da est a ovest.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Perché ci sembra che il Sole si sposti nel cielo?",
+"answers": [
+"Perché il Sole gira intorno alla Terra",
+"A causa della rotazione della Terra",
+"Per le correnti atmosferiche",
+"A causa delle nuvole"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Quale punto cardinale indica il punto in cui sorge il Sole al mattino?",
+"answers": [
+"Nord",
+"Sud",
+"Est",
+"Ovest"
+],
+"correctAnswer": 2
+},
+{
+"type": "multiple-choice",
+"question": "Quale punto cardinale indica il punto in cui il Sole tramonta alla sera?",
+"answers": [
+"Est",
+"Ovest",
+"Nord",
+"Sud"
+],
+"correctAnswer": 1
+},
+{
+"type": "true-false",
+"question": "Il Sole raggiunge la sua massima altezza nel cielo a metà giornata in corrispondenza del Sud.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "In quale punto cardinale il Sole non passa mai direttamente?",
+"answers": [
+"Nord",
+"Sud",
+"Est",
+"Ovest"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "Come si può trovare facilmente il Nord di notte?",
+"answers": [
+"Guardando la Luna",
+"Cercando la Stella Polare nel cielo",
+"Osservando la forma delle nuvole",
+"Usando un orologio a lancette"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Quale tra questi è un sinonimo corretto per l'Est?",
+"answers": [
+"Ponente",
+"Occidente",
+"Levante",
+"Meridione"
+],
+"correctAnswer": 2
+},
+{
+"type": "multiple-choice",
+"question": "Perché l'Ovest è anche chiamato 'Ponente'?",
+"answers": [
+"Perché indica la posizione del Sole a metà giornata",
+"Perché il Sole 'si pone', cioè scende",
+"Perché il Sole 'si leva' nel cielo",
+"Perché è il punto opposto al Sud"
+],
+"correctAnswer": 1
+},
+{
+"type": "true-false",
+"question": "Il termine 'Mezzogiorno' è un sinonimo del punto cardinale Sud.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "Quali sono i sinonimi del punto cardinale Nord?",
+"answers": [
+"Levante o Oriente",
+"Ponente o Occidente",
+"Meridione o Mezzogiorno",
+"Settentrione o Mezzanotte"
+],
+"correctAnswer": 3
+},
+{
+"type": "multiple-choice",
+"question": "Applicando il metodo del corpo umano, se ti trovi all'aperto a Mezzogiorno e guardi verso il Sole, quale punto cardinale si trova esattamente dietro le tue spalle?",
+"answers": [
+"Sud",
+"Nord",
+"Est",
+"Ovest"
+],
+"correctAnswer": 1
+},
+{
+"type": "true-false",
+"question": "Se guardo il Sole a mezzogiorno, l'Ovest si trova alla mia destra.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "Quale strumento moderno è dotato di un ago magnetizzato che punta sempre verso il Nord magnetico?",
+"answers": [
+"Il GPS",
+"La Bussola",
+"La Carta Geografica",
+"Il Radar"
+],
+"correctAnswer": 1
+}
 ]
+}
