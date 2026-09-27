@@ -1,0 +1,74 @@
+[
+  {
+    "id": "quiz_1790528525557",
+    "title": "La linea del tempo",
+    "description": "Una linea del tempo è una linea retta con una freccia che si muove da sinistra verso destra, indicando il passaggio del tempo dal passato al futuro.",
+    "path": "repo/linea_tempo.json"
+  },
+  {
+    "id": "quiz_1790530611826",
+    "title": "Cosa è la Geografia",
+    "description": "Che cosa significa \"Geografia\" e che cosa analizza",
+    "path": "repo/geografia_intro.json"
+  },
+  {
+    "id": "quiz_1790532041963",
+    "title": "Il reticolato geografico",
+    "description": "Per trovare un punto esatto (come una citta o una nave in mezzo al mare), i geografi hanno disegnato sulla Terra una griglia invisibile.",
+    "path": "repo/reticolato.json"
+  },
+  {
+    "id": "quiz_1790530121958",
+    "title": "Cosa è la mitologia",
+    "description": "La parola mito deriva dal greco mýthos, che significa \"racconto\".",
+    "path": "repo/mitologia.json"
+  },
+  {
+    "id": "quiz_1771799889989",
+    "title": "Occhio all'errore",
+    "description": "Ortografia",
+    "path": "repo/quiz_di_ortografia.json"
+  },
+  {
+    "id": "quiz_1762106302620",
+    "title": "La proposizione subordinata",
+    "description": "Analisi del periodo per la terza media",
+    "path": "repo/proposizione_subordinata.json"
+  },
+  {
+    "id": "quiz_1761475804076",
+    "title": "Quiz sugli avverbi",
+    "description": "Testa la tua conoscenza degli avverbi nella grammatica italiana.",
+    "path": "repo/quiz_avverbi.json"
+  },
+  {
+    "id": "grammatica01",
+    "title": "La Coniugazione del Verbo",
+    "description": "Verifica le tue conoscenze sul verbo e sulla sua coniugazione!",
+    "path": "repo/verbi_01.json"
+  },
+  {
+    "id": "quiz_1759943131008",
+    "title": "Ortografia italiana",
+    "description": "Metti alla prova le tue conoscenze sull'ortografia italiana",
+    "path": "repo/quiz_di_ortografia_italiana.json"
+  },
+  {
+    "id": "quiz_1759945733012",
+    "title": "Il Verbo: Radice, Desinenza e Coniugazioni",
+    "description": "Un quiz per testare le tue conoscenze sulla struttura del verbo e sui verbi essere e avere",
+    "path": "repo/essereavere.json"
+  },
+  {
+    "id": "quiz_1760804886635",
+    "title": "Il testo argomentativo",
+    "description": "Un quiz per conoscere meglio il testo argomentativo",
+    "path": "repo/il_testo_argomentativo.json"
+  },
+  {
+    "id": "quiz_1761119066884",
+    "title": "Analisi del Periodo",
+    "description": "Metti alla prova la tua conoscenza delle frasi complesse",
+    "path": "repo/analisi_del_periodo.json"
+  }
+]
