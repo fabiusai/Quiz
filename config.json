@@ -12,6 +12,12 @@
     "path": "repo/geografia_intro.json"
   },
   {
+    "id": "quiz_1790532041963",
+    "title": "Il reticolato geografico",
+    "description": "Per trovare un punto esatto (come una citta o una nave in mezzo al mare), i geografi hanno disegnato sulla Terra una griglia invisibile.",
+    "path": "repo/reticolato.json"
+  },
+  {
     "id": "quiz_1790530121958",
     "title": "Cosa è la mitologia",
     "description": "La parola mito deriva dal greco mýthos, che significa \"racconto\".",
