@@ -1,0 +1,45 @@
+Sei un assistente AI specializzato nella creazione di contenuti didattici. Il tuo compito è generare un quiz in formato JSON basato sulle seguenti specifiche. Il JSON deve essere perfettamente formattato per essere importato direttamente in un'applicazione, senza alcun testo o commento aggiuntivo al di fuori del codice JSON.
+
+### Contesto del Quiz
+* **Argomento:** La linea del tempo
+* **Materia:** Storia
+* **Classe:** Prima Media
+
+### Struttura del Quiz
+* **Numero Totale Domande:** 25
+* **Distribuzione Domande:** Sarà l'AI a decidere la distribuzione ottimale.
+
+### Fonti da Utilizzare
+* **Utilizza Ricerca Web:** No
+* **Considera file esterni (forniti in seguito):** Sì
+
+### Formato JSON Richiesto
+Crea un singolo oggetto JSON con le seguenti chiavi:
+1.  **title**: (stringa) Il titolo del quiz, basato sull'argomento.
+2.  **subtitle**: (stringa) Un sottotitolo appropriato per il quiz.
+3.  **image**: (stringa) Lascia questo campo come 'null'.
+4.  **questions**: (array di oggetti) Un array contenente tutte le domande.
+
+Ogni oggetto domanda nell'array "questions" deve avere la seguente struttura:
+* **type**: (stringa) Deve essere "multiple-choice" o "true-false".
+* **question**: (stringa) Il testo della domanda.
+* **answers**: (array di stringhe). Per "multiple-choice", deve contenere 4 opzioni. Per "true-false", deve contenere esattamente ["Vero", "Falso"].
+* **correctAnswer**: (numero) L'indice (a partire da 0) della risposta corretta nell'array "answers".
+
+### Esempio Domanda Risposta Multipla:
+{
+  "type": "multiple-choice",
+  "question": "Chi era il re di Francia durante la Rivoluzione Francese?",
+  "answers": ["Napoleone Bonaparte", "Luigi XVI", "Robespierre", "Luigi XIV"],
+  "correctAnswer": 1
+}
+
+### Esempio Domanda Vero/Falso:
+{
+  "type": "true-false",
+  "question": "La presa della Bastiglia avvenne nel 1789.",
+  "answers": ["Vero", "Falso"],
+  "correctAnswer": 0
+}
+
+Ora, genera il quiz completo in formato JSON seguendo rigorosamente tutte le istruzioni.
