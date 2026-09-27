@@ -46,5 +46,11 @@
     "title": "Analisi del Periodo",
     "description": "Metti alla prova la tua conoscenza delle frasi complesse",
     "path": "repo/analisi_del_periodo.json"
+  },
+  {
+    "id": "quiz_1790528525557",
+    "title": "La linea del tempo",
+    "description": "Una linea del tempo è una linea retta con una freccia che si muove da sinistra verso destra, indicando il passaggio del tempo dal passato al futuro.",
+    "path": "repo/linea_tempo"
   }
 ]
