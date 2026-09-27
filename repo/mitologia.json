@@ -1,0 +1,260 @@
+{
+"title": "Introduzione al Mito",
+"subtitle": "Test di Letteratura per la Prima Media",
+"image": null,
+"questions": [
+{
+"type": "true-false",
+"question": "La parola 'mito' deriva da una parola greca che significa 'racconto'.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "Cosa significa esattamente la parola greca 'mýthos'?",
+"answers": [
+"Invenzione",
+"Verità",
+"Racconto",
+"Poesia"
+],
+"correctAnswer": 2
+},
+{
+"type": "true-false",
+"question": "Per i popoli antichi, i miti erano fiabe inventate solo per divertirsi.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Prima della nascita della scienza, a cosa servivano i miti?",
+"answers": [
+"A far addormentare i bambini",
+"A dare risposte alle grandi domande della vita e dell'universo",
+"A insegnare a leggere e scrivere",
+"A intrattenere i re a corte"
+],
+"correctAnswer": 1
+},
+{
+"type": "true-false",
+"question": "Il tempo nei miti è sempre ben definito e preciso, con date esatte storiche.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Quale di queste formule temporali è tipica di un mito?",
+"answers": [
+"Nel 1492",
+"Ieri pomeriggio",
+"Il 5 maggio 1821",
+"All'inizio dei tempi"
+],
+"correctAnswer": 3
+},
+{
+"type": "true-false",
+"question": "I luoghi descritti nei miti sono spesso aperti, selvaggi o fantastici, come il fondo dell'oceano.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "Chi sono solitamente i protagonisti dei miti?",
+"answers": [
+"Scienziati e inventori",
+"Dei, eroi e creature magiche",
+"Persone comuni",
+"Re e regine dell'età moderna"
+],
+"correctAnswer": 1
+},
+{
+"type": "true-false",
+"question": "All'inizio della storia umana, i miti venivano trasmessi esclusivamente in forma scritta.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Come venivano tramandati i miti in origine?",
+"answers": [
+"Attraverso i libri stampati",
+"Tramite incisioni su pietra",
+"A voce di generazione in generazione",
+"Con rappresentazioni teatrali"
+],
+"correctAnswer": 2
+},
+{
+"type": "multiple-choice",
+"question": "In quali tre grandi categorie si dividono i miti in base alla loro funzione?",
+"answers": [
+"Matematiche, storiche e scientifiche",
+"Comiche, tragiche e drammatiche",
+"Religiose, politiche e militari",
+"D'origine, naturali e di comportamento"
+],
+"correctAnswer": 3
+},
+{
+"type": "true-false",
+"question": "I miti cosmogonici (o d'origine) spiegano come è nato l'universo, la Terra o gli esseri umani.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "Quale tipo di mito spiega fenomeni della natura come i fulmini o il vento?",
+"answers": [
+"Miti storici",
+"Miti d'origine",
+"Miti naturali",
+"Miti di comportamento"
+],
+"correctAnswer": 2
+},
+{
+"type": "true-false",
+"question": "Il mito di Icaro, che disubbidisce al padre, è un esempio di mito di comportamento (o morale).",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "Cosa spiega il mito di Demetra che, quando è triste, fa cadere le foglie?",
+"answers": [
+"La nascita degli alberi",
+"L'alternarsi delle stagioni",
+"La creazione del Sole",
+"L'origine dell'uomo"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Secondo il mito greco delle origini, cosa c'era all'inizio di tutto l'universo?",
+"answers": [
+"Il mare",
+"Il Sole",
+"La Terra",
+"Il Caos"
+],
+"correctAnswer": 3
+},
+{
+"type": "true-false",
+"question": "Nel mito greco delle origini, Gea rappresenta il Cielo stellato.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Chi è Eros nel mito greco delle origini?",
+"answers": [
+"Il primo gigante",
+"Il dio del mare",
+"L'Amore divino",
+"Il dio del cielo"
+],
+"correctAnswer": 2
+},
+{
+"type": "true-false",
+"question": "Urano, il Cielo stellato, fu generato da Gea da sola.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "Secondo il mito greco, cosa nacque dall'unione di Urano (il Cielo) e Gea (la Terra)?",
+"answers": [
+"Le stelle e la luna",
+"Gli animali terrestri",
+"I fiumi, i mari, le montagne e i giganti",
+"Gli dèi dell'Olimpo"
+],
+"correctAnswer": 2
+},
+{
+"type": "multiple-choice",
+"question": "Nel mito egizio, che cos'era il 'Nun' all'inizio del tempo?",
+"answers": [
+"Una montagna di fuoco",
+"Un immenso oceano di acque scure e caotiche",
+"Un cielo senza stelle",
+"Un deserto di sabbia infinita"
+],
+"correctAnswer": 1
+},
+{
+"type": "true-false",
+"question": "Nel mito egizio, Ra emerge dalle acque del Nun uscendo da un meraviglioso fiore di rosa.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 1
+},
+{
+"type": "multiple-choice",
+"question": "Chi è Ra nella tradizione egiziana?",
+"answers": [
+"Il dio della Terra",
+"Il dio del Caos",
+"Il dio della pioggia",
+"Il dio del Sole"
+],
+"correctAnswer": 3
+},
+{
+"type": "true-false",
+"question": "Nel mito egizio, la luce di Ra scacciò per sempre il buio del Nun.",
+"answers": [
+"Vero",
+"Falso"
+],
+"correctAnswer": 0
+},
+{
+"type": "multiple-choice",
+"question": "Come sono nati i primi esseri umani secondo il mito egizio di Ra?",
+"answers": [
+"Dal fango impastato con l'acqua",
+"Dai petali del fiore di loto",
+"Dalle sue lacrime di gioia",
+"Dai suoi capelli caduti sulla terra"
+],
+"correctAnswer": 2
+}
+]
+}
